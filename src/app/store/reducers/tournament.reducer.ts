@@ -1,4 +1,4 @@
-import { Actions, TOURNAMENT_ADD_TEAM, TOURNAMENT_ADD_TEAM_NAME } from './../actions/tournament.actions';
+import { Actions, TOURNAMENT_ADD_TEAM, TOURNAMENT_ADD_TEAM_NAME, TOURNAMENT_RESET } from './../actions/tournament.actions';
 import { TournamentState, teamNames, player } from './../../models/tournament.models';
 
 
@@ -23,18 +23,23 @@ export function tournamentReducer(state: TournamentState = InitialTournamenState
         {
             type: '[Tournament] AddTeam',
             payload: {
-                name: 'Rumms Bumms',
-                player1: 'Ding',
-                player2: 'Dong'
+                name: 'Terrifying Metal Wipeout',
+                player1: 'Maik',
+                player2: 'Fouad'
             }
         }
         */
         case TOURNAMENT_ADD_TEAM:
+            console.log('add_team (reducer): ', action.payload.name,  state.teamNames.filter(name => name !== action.payload.name));
             return {
                 ...state,
+                player: state.player.filter(name => action.payload.player1 !== name && action.payload.player2 !== name),
+                teamNames: state.teamNames.filter(name => name !== action.payload.name),
                 teams: [...state.teams, action.payload]
             };
 
+        case TOURNAMENT_RESET:
+            return InitialTournamenState;
     }
 
     return state;

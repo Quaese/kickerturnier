@@ -1,92 +1,90 @@
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li> -->
-      <!-- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-        <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li> -->
-    </ul>
-    <!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
-  </div>
+    <a class="navbar-brand qp-tournament-navbar-brand" href="#" (click)="preventDefault($event)">Weihnachtsfeier 2018</a>
 </nav>
 
 <main role="main">
 
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-3">Kickerturnier 2018</h1>
-      <h3>Auslosung zum Kickerturnier 2018.</h3>
-      <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p> -->
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+        <h1 class="display-3">Kickerturnier 2018</h1>
+        <h3>Tool zum Auslosen der Teams für das Kickerturnier zur Weihnachtsfeier 2018.</h3>
+        </div>
     </div>
-  </div>
 
-  <div class="container">
-    <!-- Example row of columns -->
-    <div class="row">
-      <div class="col-md-4">
-        <h2>Team Namen</h2>
-        <ul>
-            <ng-template ngFor let-teamName [ngForOf]="teamNames$ | async">
-                <li>{{teamName}}</li>
-            </ng-template>
-        </ul>
-      </div>
-      <div class="col-md-4">
-            <h2>Spieler</h2>
-            <ul>
-                <ng-template ngFor let-player [ngForOf]="players$ | async">
-                    <li>{{player}}</li>
-                </ng-template>
-            </ul>
-      </div>
-      <div class="col-md-4">
-        <h2>Heading</h2>
-        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-      </div>
-
-      <div class="row">
-          <div class="col-md-12">
-                <h2>Teams</h2>
+    <div class="container">
+        <!-- Example row of columns -->
+        <div class="row qp-tournament-row-toggler" *ngIf="btnDisabled">
+            <div class="col-md-12 text-right">
+                <i class="fa fa-plus" *ngIf="isReady" (click)="togglePoolSection()" aria-hidden="true"></i>
+                <i class="fa fa-minus" *ngIf="!isReady" (click)="togglePoolSection()" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="row qp-tournament-row-teams-and-players" *ngIf="!isReady">
+            <div class="col-md-4">
+                <h2>Team Namen</h2>
                 <ul>
-                    <ng-template ngFor let-team [ngForOf]="teams$ | async">
-                        <li>{{team?.name}}: {{team?.player1}}, {{team?.player2}}</li>
+                    <ng-template ngFor let-teamName [ngForOf]="teamNames$ | async">
+                        <li>{{teamName}}</li>
                     </ng-template>
                 </ul>
-          </div>
-      </div>
-    </div>
+            </div><!-- //.col-md-4 -->
+            <div class="col-md-4">
+                <h2>Spieler</h2>
+                <ul>
+                    <ng-template ngFor let-player [ngForOf]="players$ | async">
+                        <li>{{player}}</li>
+                    </ng-template>
+                </ul>
+            </div><!-- //.col-md-4 -->
+            <div class="col-md-4">
+                <h2>Teams erstellen</h2>
+                <div *ngIf="!btnDisabled">
+                    <p>Zufälliges Erstellen von Teams:</p>
+                    <p>
+                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeam($event)" role="button">Generieren &raquo;</button>
+                    </p>
+                </div>
+                <div *ngIf="btnDisabled">
+                    <p>Es können keine weiteren Teams erstellt werden.</p>
+                    <p>Teams und Spieler zurücksetzen.</p>
+                    <p>
+                        <button class="btn btn-block btn-danger" *ngIf="btnDisabled" (click)="resetTeams()">Reset</button>
+                    </p>
+                </div>
+            </div><!-- //.col-md-4 -->
+        </div><!-- //.row -->
 
-    <hr />
 
-  </div> <!-- /container -->
+        <div *ngIf="(teams$ | async).length">
+            <div class="row qp-tournament-row-spacer">
+                <div class="col-md-12">
+                    <h2>Teams</h2>
+                </div><!-- //.col-md-12 -->
+            </div><!-- //.row -->
 
+            <div class="row qp-tournament-row-header">
+                <div class="col-md-1"></div><!-- //.col-md-1 -->
+                <div class="col-md-5">Team</div><!-- //.col-md-5 -->
+                <div class="col-md-3">Spieler 1</div><!-- //.col-md-3 -->
+                <div class="col-md-3">Spieler 2</div><!-- //.col-md-3 -->
+            </div><!-- //.row -->
+            <ng-template ngFor let-team let-i="index+1" let-odd="odd" [ngForOf]="teams$ | async">
+                <div class="row qp-tournament-row-body" [ngClass]="{'qp-tournament-row-alternate': odd}">
+                    <div class="col-md-1 text-right">{{i}}</div><!-- //.col-md-1 -->
+                    <div class="col-md-5">{{team?.name}}</div><!-- //.col-md-5 -->
+                    <div class="col-md-3">{{team?.player1}}</div><!-- //.col-md-3 -->
+                    <div class="col-md-3">{{team?.player2}}</div><!-- //.col-md-3 -->
+                </div><!-- //.row -->
+            </ng-template>
+        </div>
+
+    </div> <!-- /container -->
 </main>
 
-  <footer class="container">
-    <p>&copy; Company 2017-2018</p>
-  </footer>
+<footer class="container qp-tournament-footer">
+    <hr />
+    <p>Tool zum Auslosen von Teams für die Weihnachtsfeier 2018 (Quaese)</p>
+</footer>

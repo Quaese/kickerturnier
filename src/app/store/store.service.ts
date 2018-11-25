@@ -2,6 +2,7 @@ import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { TournamentAddTeamAction, TournamentResetAction } from './actions/tournament.actions';
 import { TournamentState } from './../models/tournament.models';
 import { State } from './reducers/index';
 import { Team } from '../models/tournament.models';
@@ -33,5 +34,13 @@ export class StoreService {
     }
     getPlayer$() {
         return this.player$;
+    }
+
+    dispatchTournamentAddTeamAction(team: Team) {
+        this.store.dispatch(new TournamentAddTeamAction(team));
+    }
+
+    dispatchTournamentReset() {
+        this.store.dispatch(new TournamentResetAction());
     }
 }
