@@ -10,7 +10,7 @@
     <div class="jumbotron">
         <div class="container">
         <h1 class="display-3">Kickerturnier 2018</h1>
-        <h3>Tool zum Auslosen der Teams für das Kickerturnier zur Weihnachtsfeier 2018.</h3>
+        <h3>Tool zum Auslosen der Teams für das Kickerturnier zur Weihnachtsfeier 2018</h3>
         </div>
     </div>
 
@@ -25,17 +25,17 @@
         <div class="row qp-tournament-row-teams-and-players" *ngIf="!isReady">
             <div class="col-md-4">
                 <h2>Team Namen</h2>
-                <ul>
+                <ul class="list-group">
                     <ng-template ngFor let-teamName [ngForOf]="teamNames$ | async">
-                        <li>{{teamName}}</li>
+                        <li class="list-group-item">{{teamName}}</li>
                     </ng-template>
                 </ul>
             </div><!-- //.col-md-4 -->
             <div class="col-md-4">
                 <h2>Spieler</h2>
-                <ul>
+                <ul class="list-group">
                     <ng-template ngFor let-player [ngForOf]="players$ | async">
-                        <li>{{player}}</li>
+                        <li class="list-group-item">{{player}}</li>
                     </ng-template>
                 </ul>
             </div><!-- //.col-md-4 -->
