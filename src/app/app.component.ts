@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { StoreService } from './store/store.service';
@@ -23,10 +23,15 @@ export class AppComponent {
     players: string[];
     teamNames: string[];
 
+    activeTeamName = -1;
+    activeParticipant = -1;
+
     constructor(
         private storeService: StoreService,
-        private localStorage: LocalStorageService
+        private localStorage: LocalStorageService,
+        private elRef: ElementRef
     ) {
+
         this.tournamentState$ = this.storeService.getTournamentState$();
         this.teamNames$ = this.storeService.getTeamNames$();
         this.players$ = this.storeService.getPlayer$();
@@ -58,33 +63,113 @@ export class AppComponent {
                 name: '',
                 player1: '',
                 player2: ''
-            };
+            },
+            counter = 0,
+            delay = 200,
+            loops = 5,
+            hTimer;
 
-            // Player 1
+        // Player 1
+        hTimer = setInterval(() => {
             index = this.randomIndex(this.players);
-            team.player1 = this.players[index];
-            // reduce/filter player array
-            this.players = this.players.filter((player, idx) => idx !== index);
+            this.activeParticipant = index;
 
-            // Player 2
-            index = this.randomIndex(this.players);
-            team.player2 = this.players[index];
-            // reduce/filter player array
-            this.players = this.players.filter((player, idx) => idx !== index);
+            counter++;
 
-            // Team-Name
-            index = this.randomIndex(this.teamNames);
-            team.name = this.teamNames[index];
+            if (counter > loops) {
+                team.player1 = this.players[index];
+                // reduce/filter player array
+                this.players = this.players.filter((player, idx) => idx !== index);
 
-            // dispatch action
-            this.storeService.dispatchTournamentAddTeamAction(team);
+                counter = 0;
 
-            if (!(this.players.length > 1 && this.teamNames.length > 0)) {
-                this.btnDisabled = true;
-                this.isReady = true;
-                return;
+                clearInterval(hTimer);
+
+                // Player 2
+                hTimer = setInterval(() => {
+                    index = this.randomIndex(this.players);
+                    this.activeParticipant = index;
+
+                    counter++;
+
+                    if (counter > loops) {
+                        team.player2 = this.players[index];
+                        // reduce/filter player array
+                        this.players = this.players.filter((player, idx) => idx !== index);
+
+                        counter = 0;
+                        clearTimeout(hTimer);
+
+                        // Team-Name
+                        hTimer = setInterval(() => {
+                            index = this.randomIndex(this.teamNames);
+                            this.activeTeamName = index;
+
+                            counter++;
+
+                            if (counter > loops) {
+                                clearTimeout(hTimer);
+                                counter = 0;
+
+                                this.activeParticipant = -1;
+                                this.activeTeamName = -1;
+
+                                team.name = this.teamNames[index];
+
+                                    // dispatch action
+                                this.storeService.dispatchTournamentAddTeamAction(team);
+
+                                if (!(this.players.length > 1 && this.teamNames.length > 0)) {
+                                    this.btnDisabled = true;
+                                    this.isReady = true;
+                                    return;
+                                }
+                            }
+                        }, delay);
+                    }
+                }, delay);
             }
-        }
+        }, delay);
+
+        // console.log(this.elRef);
+
+
+
+
+
+
+        // let index: number,
+        //     team: Team = {
+        //         name: '',
+        //         player1: '',
+        //         player2: ''
+        //     };
+
+        // // Player 1
+        // index = this.randomIndex(this.players);
+        // team.player1 = this.players[index];
+        // // reduce/filter player array
+        // this.players = this.players.filter((player, idx) => idx !== index);
+
+        // // Player 2
+        // index = this.randomIndex(this.players);
+        // team.player2 = this.players[index];
+        // // reduce/filter player array
+        // this.players = this.players.filter((player, idx) => idx !== index);
+
+        // // Team-Name
+        // index = this.randomIndex(this.teamNames);
+        // team.name = this.teamNames[index];
+
+        // // dispatch action
+        // this.storeService.dispatchTournamentAddTeamAction(team);
+
+        // if (!(this.players.length > 1 && this.teamNames.length > 0)) {
+        //     this.btnDisabled = true;
+        //     this.isReady = true;
+        //     return;
+        // }
+    }
 
     preventDefault(evt) {
         evt.preventDefault();
