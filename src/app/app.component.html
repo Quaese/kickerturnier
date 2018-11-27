@@ -26,16 +26,16 @@
             <div class="col-md-4">
                 <h2>Team Namen</h2>
                 <ul class="list-group">
-                    <ng-template ngFor let-teamName [ngForOf]="teamNames$ | async">
-                        <li class="list-group-item">{{teamName}}</li>
+                    <ng-template ngFor let-teamName let-i="index" [ngForOf]="teamNames$ | async">
+                        <li class="list-group-item" [ngClass]="{'active': (activeTeamName === i)}">{{teamName}}</li>
                     </ng-template>
                 </ul>
             </div><!-- //.col-md-4 -->
             <div class="col-md-4">
                 <h2>Spieler</h2>
                 <ul class="list-group">
-                    <ng-template ngFor let-player [ngForOf]="players$ | async">
-                        <li class="list-group-item">{{player}}</li>
+                    <ng-template ngFor let-player let-i="index" [ngForOf]="players$ | async">
+                        <li class="list-group-item" [ngClass]="{'active': (activeParticipant1 === i || activeParticipant2 === i)}">{{player}}</li>
                     </ng-template>
                 </ul>
             </div><!-- //.col-md-4 -->
@@ -44,7 +44,8 @@
                 <div *ngIf="!btnDisabled">
                     <p>Zufälliges Erstellen von Teams:</p>
                     <p>
-                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeam($event)" role="button">Generieren &raquo;</button>
+                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeamAnimated($event)" role="button">Generieren (Anim)</button>
+                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeam($event)" role="button">Generieren</button>
                     </p>
                 </div>
                 <div *ngIf="btnDisabled">
