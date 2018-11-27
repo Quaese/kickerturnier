@@ -80,11 +80,12 @@ export class AppComponent {
             counter++;
 
             if (counter > loops) {
-                clearTimeout(hTimer);
-                counter = 0;
-
                 team.name = this.teamNames[index];
-                    setTimeout(() => {
+
+                counter = 0;
+                clearTimeout(hTimer);
+
+                setTimeout(() => {
                     // Player 1
                     hTimer = setInterval(() => {
                         index = this.randomIndex(this.players);
@@ -98,7 +99,6 @@ export class AppComponent {
                             this.players = this.players.filter((player, idx) => idx !== index);
 
                             counter = 0;
-
                             clearInterval(hTimer);
 
                             setTimeout(() => {
@@ -132,10 +132,12 @@ export class AppComponent {
                                             }
                                         }, delayTimeout);
                                     }
+
                                 }, delayInterval);
                             }, delayTimeout);
 
                         }
+
                     }, delayInterval);
                 }, delayTimeout);
 
