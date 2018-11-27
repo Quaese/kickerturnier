@@ -27,9 +27,9 @@ export const teamNames: string[] = [
 // Teilnehmer
 export const player: string[] = [
     'Carina',
-    'Marcus',
     'Maik',
     'Peter',
+    'Björn',
     'Fouad-Steffen',
     'Oleksandr',
     'Friedrich',

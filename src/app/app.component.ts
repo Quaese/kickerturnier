@@ -1,7 +1,9 @@
-import { StoreService } from './store/store.service';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Team, teamNames } from './models/tournament.models';
+
+import { StoreService } from './store/store.service';
+import { LocalStorageService } from './services/localstorage.service';
+import { Team, TournamentState } from './models/tournament.models';
 
 @Component({
     selector: 'app-root',
@@ -13,6 +15,7 @@ export class AppComponent {
     btnDisabled = false;
     isReady = false;
 
+    tournamentState$: Observable<TournamentState>;
     teamNames$: Observable<string[]>;
     players$: Observable<string[]>;
     teams$: Observable<Team[]>;
@@ -20,15 +23,24 @@ export class AppComponent {
     players: string[];
     teamNames: string[];
 
-    constructor(private storeService: StoreService) {
+    constructor(
+        private storeService: StoreService,
+        private localStorage: LocalStorageService
+    ) {
+        this.tournamentState$ = this.storeService.getTournamentState$();
         this.teamNames$ = this.storeService.getTeamNames$();
         this.players$ = this.storeService.getPlayer$();
         this.teams$ = this.storeService.getTeams$();
 
         // observe tournament state
-        this.storeService.getTournamentState$().subscribe(state => {
+        this.tournamentState$.subscribe(state => {
+            // set button to diabled if not enough players or team names are left to generate a further team
             this.btnDisabled = (state.player.length > 1 && state.teamNames.length > 0) ? false : true;
-            console.log('observe tournamentState: ', this.btnDisabled);
+
+            if (this.btnDisabled) {
+                // save tournament state to local storage
+                this.localStorage.storeOnLocalStorage(String(new Date().getTime()), state)
+            }
         });
 
         // get non observed arrays
@@ -86,5 +98,9 @@ export class AppComponent {
         this.storeService.dispatchTournamentReset();
         this.btnDisabled = false;
         this.isReady = false;
+    }
+
+    onResetStorage() {
+        this.localStorage.removeFromStorage();
     }
 }
