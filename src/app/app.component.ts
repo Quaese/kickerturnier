@@ -24,7 +24,8 @@ export class AppComponent {
     teamNames: string[];
 
     activeTeamName = -1;
-    activeParticipant = -1;
+    activeParticipant1 = -1;
+    activeParticipant2 = -1;
 
     constructor(
         private storeService: StoreService,
@@ -57,7 +58,7 @@ export class AppComponent {
         return Math.floor(Math.random() * arr.length);
     }
 
-    onGenerateTeam(evt) {
+    onGenerateTeamAnimated(evt) {
         let index: number,
             team: Team = {
                 name: '',
@@ -65,110 +66,119 @@ export class AppComponent {
                 player2: ''
             },
             counter = 0,
-            delay = 200,
+            delayInterval = 300,
+            delayTimeout = 600,
             loops = 5,
             hTimer;
 
-        // Player 1
+
+        // Team-Name
         hTimer = setInterval(() => {
-            index = this.randomIndex(this.players);
-            this.activeParticipant = index;
+            index = this.randomIndex(this.teamNames);
+            this.activeTeamName = index;
 
             counter++;
 
             if (counter > loops) {
-                team.player1 = this.players[index];
-                // reduce/filter player array
-                this.players = this.players.filter((player, idx) => idx !== index);
-
+                clearTimeout(hTimer);
                 counter = 0;
 
-                clearInterval(hTimer);
+                team.name = this.teamNames[index];
+                    setTimeout(() => {
+                    // Player 1
+                    hTimer = setInterval(() => {
+                        index = this.randomIndex(this.players);
+                        this.activeParticipant1 = index;
 
-                // Player 2
-                hTimer = setInterval(() => {
-                    index = this.randomIndex(this.players);
-                    this.activeParticipant = index;
+                        counter++;
 
-                    counter++;
+                        if (counter > loops) {
+                            team.player1 = this.players[index];
+                            // reduce/filter player array
+                            this.players = this.players.filter((player, idx) => idx !== index);
 
-                    if (counter > loops) {
-                        team.player2 = this.players[index];
-                        // reduce/filter player array
-                        this.players = this.players.filter((player, idx) => idx !== index);
+                            counter = 0;
 
-                        counter = 0;
-                        clearTimeout(hTimer);
+                            clearInterval(hTimer);
 
-                        // Team-Name
-                        hTimer = setInterval(() => {
-                            index = this.randomIndex(this.teamNames);
-                            this.activeTeamName = index;
+                            setTimeout(() => {
+                                // Player 2
+                                hTimer = setInterval(() => {
+                                    index = this.randomIndex(this.players);
+                                    this.activeParticipant2 = index;
 
-                            counter++;
+                                    counter++;
 
-                            if (counter > loops) {
-                                clearTimeout(hTimer);
-                                counter = 0;
+                                    if (counter > loops) {
+                                        team.player2 = this.players[index];
+                                        // reduce/filter player array
+                                        this.players = this.players.filter((player, idx) => idx !== index);
 
-                                this.activeParticipant = -1;
-                                this.activeTeamName = -1;
+                                        counter = 0;
+                                        clearTimeout(hTimer);
 
-                                team.name = this.teamNames[index];
+                                        setTimeout(() => {
+                                            this.activeParticipant1 = -1;
+                                            this.activeParticipant2 = -1;
+                                            this.activeTeamName = -1;
 
-                                    // dispatch action
-                                this.storeService.dispatchTournamentAddTeamAction(team);
+                                            // dispatch action
+                                            this.storeService.dispatchTournamentAddTeamAction(team);
 
-                                if (!(this.players.length > 1 && this.teamNames.length > 0)) {
-                                    this.btnDisabled = true;
-                                    this.isReady = true;
-                                    return;
-                                }
-                            }
-                        }, delay);
-                    }
-                }, delay);
+                                            if (!(this.players.length > 1 && this.teamNames.length > 0)) {
+                                                this.btnDisabled = true;
+                                                this.isReady = true;
+                                                return;
+                                            }
+                                        }, delayTimeout);
+                                    }
+                                }, delayInterval);
+                            }, delayTimeout);
+
+                        }
+                    }, delayInterval);
+                }, delayTimeout);
+
             }
-        }, delay);
+        }, delayInterval);
+    }
 
+
+
+    onGenerateTeam(evt) {
         // console.log(this.elRef);
 
+        let index: number,
+            team: Team = {
+                name: '',
+                player1: '',
+                player2: ''
+            };
 
+        // Player 1
+        index = this.randomIndex(this.players);
+        team.player1 = this.players[index];
+        // reduce/filter player array
+        this.players = this.players.filter((player, idx) => idx !== index);
 
+        // Player 2
+        index = this.randomIndex(this.players);
+        team.player2 = this.players[index];
+        // reduce/filter player array
+        this.players = this.players.filter((player, idx) => idx !== index);
 
+        // Team-Name
+        index = this.randomIndex(this.teamNames);
+        team.name = this.teamNames[index];
 
+        // dispatch action
+        this.storeService.dispatchTournamentAddTeamAction(team);
 
-        // let index: number,
-        //     team: Team = {
-        //         name: '',
-        //         player1: '',
-        //         player2: ''
-        //     };
-
-        // // Player 1
-        // index = this.randomIndex(this.players);
-        // team.player1 = this.players[index];
-        // // reduce/filter player array
-        // this.players = this.players.filter((player, idx) => idx !== index);
-
-        // // Player 2
-        // index = this.randomIndex(this.players);
-        // team.player2 = this.players[index];
-        // // reduce/filter player array
-        // this.players = this.players.filter((player, idx) => idx !== index);
-
-        // // Team-Name
-        // index = this.randomIndex(this.teamNames);
-        // team.name = this.teamNames[index];
-
-        // // dispatch action
-        // this.storeService.dispatchTournamentAddTeamAction(team);
-
-        // if (!(this.players.length > 1 && this.teamNames.length > 0)) {
-        //     this.btnDisabled = true;
-        //     this.isReady = true;
-        //     return;
-        // }
+        if (!(this.players.length > 1 && this.teamNames.length > 0)) {
+            this.btnDisabled = true;
+            this.isReady = true;
+            return;
+        }
     }
 
     preventDefault(evt) {
