@@ -30,7 +30,7 @@ export function tournamentReducer(state: TournamentState = InitialTournamenState
         }
         */
         case TOURNAMENT_ADD_TEAM:
-            console.log('add_team (reducer): ', action.payload.name,  state.teamNames.filter(name => name !== action.payload.name));
+            // console.log('add_team (reducer): ', action.payload.name,  state.teamNames.filter(name => name !== action.payload.name));
             return {
                 ...state,
                 player: state.player.filter(name => action.payload.player1 !== name && action.payload.player2 !== name),
