@@ -1,91 +1,21 @@
-<!-- <router-outlet></router-outlet> -->
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand qp-tournament-navbar-brand" href="#" (click)="preventDefault($event)">Weihnachtsfeier 2018</a>
+    <a class="navbar-brand qp-tournament-navbar-brand" href="#" (click)="preventDefault($event)">Random Teams Generator</a>
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" routerLink="home">Home</a></li>
+            <li class="nav-item active"><a class="nav-link" routerLink="draw">Teams</a></li>
+            <li class="nav-item active"><a class="nav-link">Archiv</a></li>
+        </ul>
+    </div>
 </nav>
 
 <main role="main">
-
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-        <div class="container">
-        <h1 class="display-3">Kickerturnier 2018</h1>
-        <h3>Tool zum Auslosen der Teams für das Kickerturnier zur Weihnachtsfeier 2018</h3>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- Example row of columns -->
-        <div class="row qp-tournament-row-toggler" *ngIf="btnDisabled">
-            <div class="col-md-12 text-right">
-                <i class="fa fa-plus" *ngIf="isReady" (click)="togglePoolSection()" aria-hidden="true"></i>
-                <i class="fa fa-minus" *ngIf="!isReady" (click)="togglePoolSection()" aria-hidden="true"></i>
-            </div>
-        </div>
-        <div class="row qp-tournament-row-teams-and-players" *ngIf="!isReady">
-            <div class="col-md-4">
-                <h2>Team Namen</h2>
-                <ul class="list-group">
-                    <ng-template ngFor let-teamName let-i="index" [ngForOf]="teamNames$ | async">
-                        <li class="list-group-item" [ngClass]="{'active': (activeTeamName === i)}">{{teamName}}</li>
-                    </ng-template>
-                </ul>
-            </div><!-- //.col-md-4 -->
-            <div class="col-md-4">
-                <h2>Spieler</h2>
-                <ul class="list-group">
-                    <ng-template ngFor let-player let-i="index" [ngForOf]="players$ | async">
-                        <li class="list-group-item" [ngClass]="{'active': (activeParticipant1 === i || activeParticipant2 === i)}">{{player}}</li>
-                    </ng-template>
-                </ul>
-            </div><!-- //.col-md-4 -->
-            <div class="col-md-4">
-                <h2>Teams erstellen</h2>
-                <div *ngIf="!btnDisabled">
-                    <p>Zufälliges Erstellen von Teams:</p>
-                    <p>
-                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeamAnimated($event)" [disabled]="isRunning" role="button">Generieren (Anim)</button>
-                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeam($event)" [disabled]="isRunning" role="button">Generieren</button>
-                    </p>
-                </div>
-                <div *ngIf="btnDisabled">
-                    <p>Es können keine weiteren Teams erstellt werden.</p>
-                    <p>Teams und Spieler zurücksetzen.</p>
-                    <p>
-                        <button class="btn btn-block btn-danger" *ngIf="btnDisabled" (click)="resetTeams()">Reset</button>
-                    </p>
-                </div>
-            </div><!-- //.col-md-4 -->
-        </div><!-- //.row -->
-
-
-        <div *ngIf="(teams$ | async).length">
-            <div class="row qp-tournament-row-spacer">
-                <div class="col-md-12">
-                    <h2>Teams</h2>
-                </div><!-- //.col-md-12 -->
-            </div><!-- //.row -->
-
-            <div class="row qp-tournament-row-header">
-                <div class="col-md-1"></div><!-- //.col-md-1 -->
-                <div class="col-md-5">Team</div><!-- //.col-md-5 -->
-                <div class="col-md-3">Spieler 1</div><!-- //.col-md-3 -->
-                <div class="col-md-3">Spieler 2</div><!-- //.col-md-3 -->
-            </div><!-- //.row -->
-            <ng-template ngFor let-team let-i="index+1" let-odd="odd" [ngForOf]="teams$ | async">
-                <div class="row qp-tournament-row-body" [ngClass]="{'qp-tournament-row-alternate': odd}">
-                    <div class="col-md-1 text-right">{{i}}</div><!-- //.col-md-1 -->
-                    <div class="col-md-5">{{team?.name}}</div><!-- //.col-md-5 -->
-                    <div class="col-md-3">{{team?.player1}}</div><!-- //.col-md-3 -->
-                    <div class="col-md-3">{{team?.player2}}</div><!-- //.col-md-3 -->
-                </div><!-- //.row -->
-            </ng-template>
-        </div>
-
-    </div> <!-- /container -->
+    <router-outlet></router-outlet>
 </main>
 
 <footer class="container qp-tournament-footer">
     <hr />
-    <p>Tool zum Auslosen von Teams für die Weihnachtsfeier 2018 (Quaese) <button (click)="onResetStorage()">Clear Storage</button></p>
+    <p>(c) Quaese 2018 - Tool zum zufälligen Auslosen von Teams</p>
 </footer>

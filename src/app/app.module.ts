@@ -12,10 +12,14 @@ import { StoreService } from './store/store.service';
 import { reducers } from './store/reducers';
 
 import { AppComponent } from './app.component';
+import { HomeComponent } from './components/home/home.component';
+import { DrawComponent } from './components/draw/draw.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        HomeComponent,
+        DrawComponent
     ],
     imports: [
         BrowserModule,
