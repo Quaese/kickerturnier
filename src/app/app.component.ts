@@ -8,7 +8,5 @@ import { Component, ElementRef } from '@angular/core';
 export class AppComponent {
     title = 'kickerturnier';
 
-    constructor(
-    ) {
-    }
+    constructor() {}
 }

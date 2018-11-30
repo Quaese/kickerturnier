@@ -203,10 +203,6 @@ export class DrawComponent implements OnInit {
         }
     }
 
-    preventDefault(evt) {
-        evt.preventDefault();
-    }
-
     togglePoolSection() {
         this.isReady = !this.isReady;
     }
