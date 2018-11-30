@@ -44,8 +44,8 @@
                 <div *ngIf="!btnDisabled">
                     <p>Zufälliges Erstellen von Teams:</p>
                     <p>
-                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeamAnimated($event)" role="button">Generieren (Anim)</button>
-                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeam($event)" role="button">Generieren</button>
+                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeamAnimated($event)" [disabled]="isRunning" role="button">Generieren (Anim)</button>
+                        <button class="btn btn-block btn-primary" [ngClass]="{'qp-tournament-btn-disabled': btnDisabled}" (click)="onGenerateTeam($event)" [disabled]="isRunning" role="button">Generieren</button>
                     </p>
                 </div>
                 <div *ngIf="btnDisabled">

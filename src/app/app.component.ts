@@ -14,6 +14,7 @@ export class AppComponent {
     title = 'kickerturnier';
     btnDisabled = false;
     isReady = false;
+    isRunning = false;
 
     tournamentState$: Observable<TournamentState>;
     teamNames$: Observable<string[]>;
@@ -59,6 +60,11 @@ export class AppComponent {
     }
 
     onGenerateTeamAnimated(evt) {
+        // if animation is running
+        if (this.isRunning) {
+            return;
+        }
+
         let index: number,
             team: Team = {
                 name: '',
@@ -71,6 +77,9 @@ export class AppComponent {
             loops = 5,
             hTimer;
 
+
+        // animation is running
+        this.isRunning = true;
 
         // Team-Name
         hTimer = setInterval(() => {
@@ -125,6 +134,9 @@ export class AppComponent {
                                             // dispatch action
                                             this.storeService.dispatchTournamentAddTeamAction(team);
 
+                                            // animation stopped
+                                            this.isRunning = false;
+
                                             if (!(this.players.length > 1 && this.teamNames.length > 0)) {
                                                 this.btnDisabled = true;
                                                 this.isReady = true;
@@ -149,6 +161,11 @@ export class AppComponent {
 
     onGenerateTeam(evt) {
         // console.log(this.elRef);
+
+        // if animation is running
+        if (this.isRunning) {
+            return;
+        }
 
         let index: number,
             team: Team = {
