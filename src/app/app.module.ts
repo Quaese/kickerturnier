@@ -14,12 +14,14 @@ import { reducers } from './store/reducers';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { DrawComponent } from './components/draw/draw.component';
+import { ArchiveComponent } from './components/archive/archive.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
-        DrawComponent
+        DrawComponent,
+        ArchiveComponent
     ],
     imports: [
         BrowserModule,
