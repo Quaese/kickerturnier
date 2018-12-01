@@ -13,15 +13,22 @@ export class ArchiveComponent implements OnInit {
     constructor(private localStorage: LocalStorageService) {}
 
     ngOnInit() {
+        // get archives from local storage
         this.archive = this.localStorage.getFromStorage();
 
+        // prepare archives for template
         this.getTeamsFromArchive();
     }
 
     getTeamsFromArchive() {
+        // if archive data exists
         if (this.archive) {
+            // map archive data to an "output array" containing outputable objects
             this.draws = this.archive.map(draw => {
+                // key of draw corresponds to its save-date
                 const key = Object.keys(draw)[0];
+
+                // return ouputable object
                 return {date: key, teams: draw[key].teams}
             });
         }
