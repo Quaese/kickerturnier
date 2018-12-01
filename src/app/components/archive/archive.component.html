@@ -9,10 +9,17 @@
 <div class="container">
 
     <div *ngIf="archive?.length">
+        <div class="row qp-tournament-row-toggler">
+            <div class="col-md-12 text-right">
+                Sortieren
+                <i class="fa fa-sort" (click)="toggleSortOrder()" aria-hidden="true"></i>
+            </div>
+        </div>
+
         <ng-template ngFor let-draw let-drawindex="index" [ngForOf]="draws">
             <div class="row qp-tournament-row-spacer">
                 <div class="col-md-12">
-                    <h2>{{drawindex+1}}. Auslosung vom {{draw.date | date: 'dd.MM.yyyy, HH:mm'}}</h2>
+                    <h2>Auslosung vom {{draw.date | date: 'dd.MM.yyyy, HH:mm'}}</h2>
                 </div><!-- //.col-md-12 -->
             </div><!-- //.row -->
 

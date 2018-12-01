@@ -34,4 +34,10 @@ export class ArchiveComponent implements OnInit {
         }
     }
 
+    toggleSortOrder() {
+        if (this.draws) {
+            this.draws.reverse();
+        }
+    }
+
 }
