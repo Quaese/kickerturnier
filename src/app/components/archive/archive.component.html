@@ -1,0 +1,36 @@
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">Kickerturnier 2018</h1>
+            <h3>Archivierte Auslosungen (max. 10 Auslosungen)</h3>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div *ngIf="archive?.length">
+            <ng-template ngFor let-draw let-drawindex="index" [ngForOf]="draws">
+                <div class="row qp-tournament-row-spacer">
+                    <div class="col-md-12">
+                        <h2>{{drawindex+1}}. Auslosung vom {{draw.date | date: 'dd.MM.yyyy, HH:mm'}}</h2>
+                    </div><!-- //.col-md-12 -->
+                </div><!-- //.row -->
+
+                <div class="row qp-tournament-row-header">
+                    <div class="col-md-1"></div><!-- //.col-md-1 -->
+                    <div class="col-md-5">Team</div><!-- //.col-md-5 -->
+                    <div class="col-md-3">Spieler 1</div><!-- //.col-md-3 -->
+                    <div class="col-md-3">Spieler 2</div><!-- //.col-md-3 -->
+                </div><!-- //.row -->
+                <ng-template ngFor let-team let-i="index+1" let-odd="odd" [ngForOf]="draw.teams">
+                    <div class="row qp-tournament-row-body" [ngClass]="{'qp-tournament-row-alternate': odd}">
+                        <div class="col-md-1 text-right">{{i}}</div><!-- //.col-md-1 -->
+                        <div class="col-md-5">{{team?.name}}</div><!-- //.col-md-5 -->
+                        <div class="col-md-3">{{team?.player1}}</div><!-- //.col-md-3 -->
+                        <div class="col-md-3">{{team?.player2}}</div><!-- //.col-md-3 -->
+                    </div><!-- //.row -->
+                </ng-template>
+            </ng-template>
+        </div>
+
+    </div> <!-- /container -->

@@ -1,3 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~font-awesome/css/font-awesome.css";
+
+
+@qp-tournament-border-color: #aaa;
+
+.qp-tournament {
+    &-row {
+        &-spacer {
+            margin-top: 40px;
+        }
+
+        &-teams-and-players {
+            min-height: 230px !important;
+        }
+
+        &-header {
+            font-size: 1.2em;
+            font-weight: 600;
+            padding: 8px 0;
+            border-bottom: 2px solid @qp-tournament-border-color;
+            margin-bottom: 8px;
+        }
+
+        &-body {
+            padding: 3px 0;
+        }
+
+        &-alternate {
+            background: #efefef;
+        }
+
+        &-toggler {
+            border-bottom: 2px solid @qp-tournament-border-color;
+            padding: 6px 0;
+            margin-bottom: 10px;
+
+            i {
+                cursor: pointer;
+                width: 25px;
+                text-align: center;
+            }
+        }
+    }
+
+    &-btn-disabled {
+        display: none;
+    }
+
+    &-navbar-brand {
+        cursor: initial;
+    }
+
+    &-footer {
+        padding-top: 50px;
+    }
+}
