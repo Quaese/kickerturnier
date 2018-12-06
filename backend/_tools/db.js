@@ -1,8 +1,8 @@
 const config = require('../config/config.json');
 const mongoose = require('mongoose');
 
-mongoose.connect(`mongodb://localhost:27017/${config.mongodb.db}`);
-// mongoose.connect(`mongodb://${config.mongodb.user}:${config.mongodb.pw}@localhost:30759/${config.mongodb.db}?authSource=admin`);
+mongoose.connect(`mongodb://localhost:27017/${config.mongodb.db}`, { useNewUrlParser: true });
+// mongoose.connect(`mongodb://${config.mongodb.user}:${config.mongodb.pw}@localhost:30759/${config.mongodb.db}?authSource=admin`, { useNewUrlParser: true });
 
 // establish database connection
 const connection = mongoose.connection;
