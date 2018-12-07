@@ -7,7 +7,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 // own modules
-const jwt = require('./_tools/jwt');
 const errorHandler = require('./_tools/error-handler');
 
 console.clear();
@@ -16,9 +15,6 @@ console.clear();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cors());
-
-// use jwt auth to secure the api
-app.use(jwt());
 
 // api routes
 // requires: user.service and db (mongoose.connection)

@@ -1,8 +1,11 @@
 const config = require('../config/config.json');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');  // see: https://www.npmjs.com/package/bcrypt
+
+const tools = require('../_tools/tools');
 const db = require('../_tools/db');
 const User = db.User;
+const Role = require('./users.roles');
 
 // export on top (better to read)
 module.exports = {
@@ -22,8 +25,17 @@ async function authenticate({username, password}) {
 
     // if an user exists and the password hash is correct
     if (user && bcrypt.compareSync(password, user.hash)) {
+        // user.toObject() returns a object representing the user: {_id, username, hash, firstName, lastName, createdDate}
+        // after destructering hash contains the user.hash value
+        // and userWithoutHash the remaining properties {_id, username, firstName, lastName, createdDate}
         const { hash, ...userWithoutHash } = user.toObject();
-        const token = jwt.sign({sub: user.id}, config.secret);
+
+        // JWT token structure:
+        // header.payload.signature
+        // e.g. eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJrZXkiOiJ2YWwiLCJpYXQiOjE0MjI2MDU0NDV9.eUiabuiKv-8PYk2AkGY4Fb5KMZeorYBLw261JPQD5lM
+        //
+        // {sub: user.id, role: user.role} is written to payload when .sign is executed
+        const token = jwt.sign({sub: user.id, role: user.role}, config.secret);
 
         return {
             ...userWithoutHash,
@@ -59,11 +71,14 @@ async function create(userParam) {
     await user.save();
 }
 
-async function update(id, userParam) {
+async function update(id, userParam, userSign) {
     const user = await User.findById(id);
 
     // validate
     if (!user) throw 'User not found.';
+
+    // if user has no Admin role and want to update another user
+    if (user.id !== userSign.sub && userSign.role !== Role.Admin) throw 'Unauthorized';
 
     if (user.username !== userParam.username && User.findOne({username: userParam.username})) {
         throw 'Username "' + userParam.username + '" is already taken.';
@@ -80,6 +95,14 @@ async function update(id, userParam) {
     await user.save();
 }
 
-async function _delete(id) {
+async function _delete(id, userParam, userSign) {
+    const user = await User.findById(id);
+
+    // validate
+    if (!user) throw 'User not found.';
+
+    // if user has no Admin role and want to update another user
+    if (user.id !== userSign.sub && userSign.role !== Role.Admin) throw 'Unauthorized';
+
     await User.findByIdAndDelete(id);
 }
