@@ -1,5 +1,5 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 
 import { StoreService } from '../../store/store.service';
 import { LocalStorageService } from '../../services/localstorage.service';
@@ -10,7 +10,7 @@ import { Team, TournamentState } from '../../models/tournament.models';
   templateUrl: './draw.component.html',
   styleUrls: ['./draw.component.less']
 })
-export class DrawComponent implements OnInit {
+export class DrawComponent implements OnInit, OnDestroy {
     btnDisabled = false;
     isReady = false;
     isRunning = false;
@@ -19,6 +19,11 @@ export class DrawComponent implements OnInit {
     teamNames$: Observable<string[]>;
     players$: Observable<string[]>;
     teams$: Observable<Team[]>;
+
+    tournamentSubscription: Subscription;
+    teamNamesSubScription: Subscription;
+    playersSubScription: Subscription;
+    teamsSubScription: Subscription;
 
     players: string[];
     teamNames: string[];
@@ -39,13 +44,13 @@ export class DrawComponent implements OnInit {
         this.teams$ = this.storeService.getTeams$();
 
         // observe tournament state
-        this.tournamentState$.subscribe(state => {
-            // set button to diabled if not enough players or team names are left to generate a further team
+        this.tournamentSubscription = this.tournamentState$.subscribe(state => {
+            // set button to disabled if not enough players or team names are left to generate a further team
             this.btnDisabled = (state.player.length > 1 && state.teamNames.length > 0) ? false : true;
 
             if (this.btnDisabled) {
                 // save tournament state to local storage
-                this.localStorage.storeOnLocalStorage(String(new Date().getTime()), state)
+                this.localStorage.storeTournamentOnLocalStorage(String(new Date().getTime()), state)
             }
         });
 
@@ -54,8 +59,16 @@ export class DrawComponent implements OnInit {
         this.players$.subscribe(players => this.players = players);
     }
 
-    ngOnInit() {
-        console.log('ngOnInit (DrawComponent');
+    ngOnInit() {}
+
+    ngOnDestroy() {
+        this.resetTeams();
+
+        // unsubscriptions
+        this.tournamentSubscription.unsubscribe();
+        this.teamNamesSubScription.unsubscribe();
+        this.playersSubScription.unsubscribe();
+        this.teamsSubScription.unsubscribe();
     }
 
     randomIndex(arr) {
