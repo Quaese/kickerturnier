@@ -33,10 +33,10 @@ export class SessionStorageService {
     }
 
     public getFromStorage(storageKey = STORAGE_KEY) {
-        return this.storage.get(storageKey) || [];
+        return this.storage.get(storageKey) || null;
     }
 
-    public storeInStorage(storageKey = STORAGE_KEY, storageValue: any) {
+    public setInStorage(storageKey = STORAGE_KEY, storageValue: any) {
         return this.storage.set(storageKey, storageValue);
     }
 }

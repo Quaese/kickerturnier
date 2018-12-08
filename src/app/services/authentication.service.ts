@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { LocalStorageService } from './localstorage.service';
 import { User } from '../models/user.models';
 import { HttpClient } from '@angular/common/http';
 import { config } from '../config/config';
@@ -14,9 +15,12 @@ export class AuthenticationService {
     // public user observable
     public currentUser$: Observable<User>;
 
-    constructor(private http: HttpClient) {
+    constructor(
+        private http: HttpClient,
+        private localStorage: LocalStorageService
+    ) {
         // BehaviorSubject awaits a start state (here user or null)
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+        this.currentUserSubject = new BehaviorSubject<User>(this.localStorage.getFromStorage('currentUser'));
         // currentUser$ becomes a Observable
         this.currentUser$ = this.currentUserSubject.asObservable();
     }
@@ -32,7 +36,7 @@ export class AuthenticationService {
                     // login successful if there is a JWT token in the response
                     if (user && user.token) {
                         // store user details and JWT token in local storage to keep user logged in between page refreshes
-                        localStorage.setItem('currentUser', JSON.stringify(user));
+                        this.localStorage.setInStorage('currentUser', user);
                         // inform observers
                         this.currentUserSubject.next(user);
                     }
@@ -43,7 +47,8 @@ export class AuthenticationService {
     }
 
     logout() {
-        localStorage.removeItem('currentUser');
+        // remove from local storage
+        this.localStorage.removeFromStorage('currentUser');
         this.currentUserSubject.next(null);
     }
 }
