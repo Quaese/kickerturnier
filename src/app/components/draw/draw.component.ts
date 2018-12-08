@@ -65,10 +65,10 @@ export class DrawComponent implements OnInit, OnDestroy {
         this.resetTeams();
 
         // unsubscriptions
-        this.tournamentSubscription.unsubscribe();
-        this.teamNamesSubScription.unsubscribe();
-        this.playersSubScription.unsubscribe();
-        this.teamsSubScription.unsubscribe();
+        this.tournamentSubscription && this.tournamentSubscription.unsubscribe();
+        this.teamNamesSubScription && this.teamNamesSubScription.unsubscribe();
+        this.playersSubScription && this.playersSubScription.unsubscribe();
+        this.teamsSubScription && this.teamsSubScription.unsubscribe();
     }
 
     randomIndex(arr) {
