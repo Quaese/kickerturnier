@@ -45,7 +45,7 @@ export class DrawComponent implements OnInit {
 
             if (this.btnDisabled) {
                 // save tournament state to local storage
-                this.localStorage.storeOnLocalStorage(String(new Date().getTime()), state)
+                this.localStorage.storeTournamentOnLocalStorage(String(new Date().getTime()), state)
             }
         });
 

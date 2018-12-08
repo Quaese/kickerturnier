@@ -5,8 +5,11 @@
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="home">Home</a></li>
-            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="draw">Teams</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="isLoggedIn"><a class="nav-link" routerLink="draw">Teams</a></li>
             <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="archive">Archiv</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="isAdmin"><a class="nav-link" routerLink="admin">Admin</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="!isLoggedIn"><a class="nav-link" routerLink="login">Login</a></li>
+            <li class="nav-item" *ngIf="isLoggedIn"><a class="nav-link" (click)="logout()">Logout</a></li>
         </ul>
     </div>
 </nav>

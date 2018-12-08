@@ -7,7 +7,7 @@ const STORAGE_KEY = "kicker_tournament";
 export class LocalStorageService {
     constructor(@Inject(LOCAL_STORAGE) private storage: StorageService) {}
 
-    public storeOnLocalStorage(
+    public storeTournamentOnLocalStorage(
         tournamentKey: string,
         tournamentState: TournamentState
     ): void {
@@ -28,11 +28,15 @@ export class LocalStorageService {
         console.log(this.storage.get(STORAGE_KEY) || "local storage is empty");
     }
 
-    public removeFromStorage() {
-        this.storage.remove(STORAGE_KEY);
+    public removeFromStorage(storageKey = STORAGE_KEY) {
+        this.storage.remove(storageKey);
     }
 
-    public getFromStorage() {
-        return this.storage.get(STORAGE_KEY) || [];
+    public getFromStorage(storageKey = STORAGE_KEY) {
+        return this.storage.get(storageKey) || [];
+    }
+
+    public storeInStorage(storageKey = STORAGE_KEY, storageValue: any) {
+        return this.storage.set(storageKey, storageValue);
     }
 }
