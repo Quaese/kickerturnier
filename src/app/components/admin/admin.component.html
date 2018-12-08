@@ -1,0 +1,23 @@
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Administration</h1>
+        <h3>Diese Seite ist nur Administratoren zugänglich.</h3>
+    </div><!-- /.container -->
+</div><!-- /.jumbotron -->
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <p>Übersicht aller Benutzer:</p>
+        </div><!-- //.col-md-12 -->
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul>
+                <li *ngFor="let user of users">{{user.firstName}} {{user.lastName}}</li>
+            </ul>
+        </div><!-- //.col-md-12 -->
+    </div><!-- //.row -->
+
+</div><!-- /.container -->
