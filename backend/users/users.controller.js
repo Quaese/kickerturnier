@@ -13,7 +13,7 @@ router.post('/register', register);
 // secure routes (with authentication)
 router.get('/', authorize(Role.Admin), getAll);             // only Role.Admin can access
 router.get('/current', authorize(), getCurrent);            // all authenticated user can access
-router.get('/:id', authorize(Role.Admin), getById);         // only Role.Admin can access
+router.get('/:id', authorize(), getById);                   // oall authenticated can access (restricted in getById)
 router.put('/:id', authorize(), update);                    // all authenticated user can access
 router.delete('/:id', authorize(Role.Admin), _delete);      // only Role.Admin can access
 
@@ -48,7 +48,7 @@ function getCurrent(req, res, next) {
 
 function getById(req, res, next) {
     const currentUser = req.user;
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
     if (id !== currentUser.sub && currentUser.role !== Role.Admin) {
         return res.status(401).json({message: 'Unauthorized (by id)'});

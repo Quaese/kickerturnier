@@ -35,6 +35,8 @@ export class AuthenticationService {
                 map(user => {
                     // login successful if there is a JWT token in the response
                     if (user && user.token) {
+                        // add id to user if necessary
+                        user.id = user._id || user.id;
                         // store user details and JWT token in local storage to keep user logged in between page refreshes
                         this.localStorage.setInStorage('currentUser', user);
                         // inform observers
