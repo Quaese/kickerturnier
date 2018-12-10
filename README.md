@@ -43,6 +43,8 @@ Use `backend/config/config.json` to configure database credentials and the jwt (
 }
 ```
 
+See: [config.json](https://github.com/Quaese/kickerturnier/commit/4915be01048a35c5cb25d9901db91b70eac5c2ed#diff-79c079d4b8c1ee9c89ede1d99c529ca8)
+
 ## Build with special base href
 
 `ng build --base-href /folder-name/ --prod`
