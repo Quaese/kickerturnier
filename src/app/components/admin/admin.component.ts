@@ -10,7 +10,7 @@ import { UserService } from './../../services/user.service';
   styleUrls: ['./admin.component.less']
 })
 export class AdminComponent implements OnInit {
-    private users: User[] = [];
+    public users: User[] = [];
 
     constructor(private userService: UserService) {}
 
