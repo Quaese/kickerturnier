@@ -55,8 +55,8 @@ export class DrawComponent implements OnInit, OnDestroy {
         });
 
         // get non observed arrays
-        this.teamNames$.subscribe(teamNames => this.teamNames = teamNames);
-        this.players$.subscribe(players => this.players = players);
+        this.teamNamesSubScription = this.teamNames$.subscribe(teamNames => this.teamNames = teamNames);
+        this.playersSubScription = this.players$.subscribe(players => this.players = players);
     }
 
     ngOnInit() {}
