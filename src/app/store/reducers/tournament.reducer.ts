@@ -33,8 +33,11 @@ export function tournamentReducer(state: TournamentState = InitialTournamenState
             // console.log('add_team (reducer): ', action.payload.name,  state.teamNames.filter(name => name !== action.payload.name));
             return {
                 ...state,
+                // filter remaining player (= player without player from payload)
                 player: state.player.filter(name => action.payload.player1 !== name && action.payload.player2 !== name),
+                // filter team names (= team names without team name from payload)
                 teamNames: state.teamNames.filter(name => name !== action.payload.name),
+                // add new team from payload to teams array
                 teams: [...state.teams, action.payload]
             };
 

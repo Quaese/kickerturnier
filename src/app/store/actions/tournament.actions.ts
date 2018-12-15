@@ -26,9 +26,7 @@ Test-Dispatch-Objekt:
 export class TournamentAddTeamAction implements Action {
   readonly type = TOURNAMENT_ADD_TEAM;
 
-  constructor(public payload: Team) {
-      console.log(payload);
-  }
+  constructor(public payload: Team) {}
 }
 
 /* Test-Dispatch-Objekt: {type: '[Tournament] Reset'} */
