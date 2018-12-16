@@ -22,6 +22,7 @@ import { DrawComponent } from './components/draw/draw.component';
 import { ArchiveComponent } from './components/archive/archive.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { LoginComponent } from './components/login/login.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { LoginComponent } from './components/login/login.component';
         StorageServiceModule
     ],
     providers: [
+        { provide: LocationStrategy, useClass: HashLocationStrategy},
         StoreService,
         LocalStorageService,
         // SessionStorageService,
