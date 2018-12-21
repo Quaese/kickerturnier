@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
 
     loading = false;
     submitted = false;
-    home = '/';
+    home = '/home';
     error = '';
 
     constructor(
