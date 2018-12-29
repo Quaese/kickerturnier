@@ -7,6 +7,7 @@ import { Role } from '../models/role.models';
 import { AdminComponent } from './components/admin/admin.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserCreateComponent } from './components/user-create/user-create.component';
+import { UserEditComponent } from './components/user-edit/user-edit.component';
 
 const routes: Routes = [{
     path: '',
@@ -29,6 +30,12 @@ const routes: Routes = [{
         {
             path: 'user-create',
             component: UserCreateComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Role.Admin] }
+        },
+        {
+            path: 'user-edit/:id',
+            component: UserEditComponent,
             canActivate: [AuthGuard],
             data: { roles: [Role.Admin] }
         }

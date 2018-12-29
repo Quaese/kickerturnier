@@ -12,3 +12,25 @@
             </ul>
         </div><!-- //.col-md-12 -->
     </div><!-- //.row -->
+
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-template ngFor let-user let-i="index" [ngForOf]="users">
+                <tr>
+                    <th scope="row">{{i}}</th>
+                    <td>{{user.firstName}}</td>
+                    <td>{{user.firstName}}</td>
+                    <td><a href="/admin/user-edit/{{user.id}}" class="badge badge-primary" (click)="navigate($event, {path: '/admin/user-edit', id: user.id})">edit</a></td>
+                </tr>
+            </ng-template>
+        </tbody>
+    </table>
