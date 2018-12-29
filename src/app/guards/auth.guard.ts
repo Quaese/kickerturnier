@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
         const currentUser = this.authenticationService.currentUserValue;
 
         if (currentUser) {
-            // check if rout is restricted by role
+            // check if route is restricted by role
             if (route.data.roles && route.data.roles.indexOf(currentUser.role) === -1) {
                 // role not authorized => redirect to home page
                 this.router.navigate(['/']);

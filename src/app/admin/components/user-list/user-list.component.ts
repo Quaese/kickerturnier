@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 
-import { User } from './../../models/user.models';
-import { UserService } from './../../services/user.service';
+import { User } from './../../../models/user.models';
+import { UserService } from './../../../services/user.service';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.less']
+  selector: 'app-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.less']
 })
-export class AdminComponent implements OnInit {
+export class UserListComponent implements OnInit {
     public users: User[] = [];
 
     constructor(private userService: UserService) {}

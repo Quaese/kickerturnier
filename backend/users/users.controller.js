@@ -13,7 +13,7 @@ router.post('/register', register);
 // secure routes (with authentication)
 router.get('/', authorize(Role.Admin), getAll);             // only Role.Admin can access
 router.get('/current', authorize(), getCurrent);            // all authenticated user can access
-router.get('/:id', authorize(), getById);                   // oall authenticated can access (restricted in getById)
+router.get('/:id', authorize(), getById);                   // all authenticated can access (restricted in getById)
 router.put('/:id', authorize(), update);                    // all authenticated user can access
 router.delete('/:id', authorize(Role.Admin), _delete);      // only Role.Admin can access
 

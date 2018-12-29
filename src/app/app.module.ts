@@ -8,6 +8,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StorageServiceModule } from 'angular-webstorage-service';
 
 import { AppRoutingModule } from './app-routing.module';
+// import { AdminModule } from './admin/admin.module';
 import { LocalStorageService } from './services/localstorage.service';
 // import { SessionStorageService } from './services/sessionstorage.service';
 // import { AuthenticationService } from './services/authentication.service';
@@ -20,7 +21,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { DrawComponent } from './components/draw/draw.component';
 import { ArchiveComponent } from './components/archive/archive.component';
-import { AdminComponent } from './components/admin/admin.component';
 import { LoginComponent } from './components/login/login.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
@@ -30,13 +30,13 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
         HomeComponent,
         DrawComponent,
         ArchiveComponent,
-        AdminComponent,
         LoginComponent
     ],
     imports: [
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
+        // AdminModule,
         AppRoutingModule,
         StoreModule.forRoot(reducers),
         StoreDevtoolsModule.instrument(),
