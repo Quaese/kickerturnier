@@ -15,9 +15,9 @@
             <li class="nav-item">
                 <a class="nav-link" routerLinkActive="active" [routerLink]="['user-create']">Neuer Benutzer</a>
             </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link" routerLinkActive="active">Edit</a>
-            </li> -->
+            <li class="nav-item" *ngIf="isEdit">
+                <a class="nav-link" [ngClass]="{active: isEdit}">Edit</a>
+            </li>
         </ul>
     </nav>
 </div><!-- /.container -->

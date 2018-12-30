@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 import { User } from './../../../models/user.models';
@@ -15,14 +15,12 @@ export class UserListComponent implements OnInit {
 
     constructor(
         private userService: UserService,
-        private router: Router,
-        private route: ActivatedRoute
+        private router: Router
     ) {}
 
     ngOnInit() {
         this.userService.getAll().pipe(first())
             .subscribe(users => {
-                console.log('Users (user-list): ', users);
                 this.users = users;
             });
     }
@@ -32,7 +30,6 @@ export class UserListComponent implements OnInit {
 
         const {path, id} = options;
 
-        // this.router.navigate([id], {relativeTo: this.route});
         this.router.navigate([path, id]);
     }
 
