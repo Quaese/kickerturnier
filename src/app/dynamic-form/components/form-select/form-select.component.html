@@ -1,0 +1,18 @@
+<div class="dynamic-field form-select" [ngClass]="config.classes?.wrapper" [formGroup]="group">
+  <label [ngClass]="config.classes?.label">{{config.label}}</label>
+  <div [ngClass]="config.classes?.inner">
+    <select
+      [ngClass]="config.classes?.control"
+      [formControlName]="config.name"
+      [attr.disabled]="config.disabled"
+      (change)="onChange($event)"
+    >
+      <option value="{{config.defaultSelected || 0}}">{{config.placeholder}}</option>
+      <ng-template ngFor let-option let-i="index" [ngForOf]="config.options">
+        <option value="{{i+1}}">
+          {{ option }}
+        </option>
+      </ng-template>
+    </select>
+  </div>
+</div>

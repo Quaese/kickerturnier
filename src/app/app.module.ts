@@ -8,6 +8,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StorageServiceModule } from 'angular-webstorage-service';
 
 import { AppRoutingModule } from './app-routing.module';
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 // import { AdminModule } from './admin/admin.module';
 import { LocalStorageService } from './services/localstorage.service';
 // import { SessionStorageService } from './services/sessionstorage.service';
@@ -35,6 +36,7 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
     imports: [
         BrowserModule,
         ReactiveFormsModule,
+        DynamicFormModule,
         HttpClientModule,
         // AdminModule,
         AppRoutingModule,
@@ -42,6 +44,9 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
         StoreDevtoolsModule.instrument(),
         StorageServiceModule
     ],
+    // exports: [
+    //     DynamicFormModule
+    // ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy},
         StoreService,

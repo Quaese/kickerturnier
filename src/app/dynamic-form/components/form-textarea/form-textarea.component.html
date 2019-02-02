@@ -1,0 +1,12 @@
+<div class="dynamic-field form-textarea" [ngClass]="config.classes?.wrapper" [formGroup]="group">
+  <label [ngClass]="config.classes?.label">{{config.label}}</label>
+  <div [ngClass]="config.classes?.inner">
+    <textarea
+      [ngClass]="config.classes?.control"
+      [formControlName]="config.name"
+      [attr.placeholder]="config.placeholder"
+      [attr.readonly]="config.readonly"
+      [attr.disabled]="config.disabled">
+    </textarea>
+  </div>
+</div>

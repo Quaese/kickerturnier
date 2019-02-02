@@ -1,0 +1,10 @@
+<div class="dynamic-field form-buttonbar" [ngClass]="config.classes?.wrapper" [formGroup]="group">
+  <ng-template ngFor let-button [ngForOf]="config.buttons">
+    <button
+      [type]="button.action"
+      [ngClass]="button.classes"
+      [disabled]="button.canDisable && config.disabled">
+      {{ button.label }}
+    </button>
+  </ng-template>
+</div>

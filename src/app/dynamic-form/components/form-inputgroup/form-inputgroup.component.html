@@ -1,0 +1,24 @@
+<div class="dynamic-field form-inputgroup" [ngClass]="config.classes?.wrapper" [formGroup]="group">
+  <ng-template ngFor let-control [ngForOf]="config.controls">
+    <div class="form-input" [ngClass]="control.classes?.wrapper">
+      <label [ngClass]="control.classes?.label">{{control.label}}</label>
+      <div [ngClass]="control.classes?.inner">
+        <input
+          type="text"
+          [ngClass]="control.classes?.control"
+          [formControlName]="control.name"
+          [attr.placeholder]="control.placeholder"
+          [attr.disabled]="control.disabled"
+          [attr.readonly]="control.readonly"
+        />
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- <ng-container
+    *ngFor="let control of config.controls;"
+    dynamicField
+    [config]="control"
+    [group]="group">
+  </ng-container> -->
+</div>

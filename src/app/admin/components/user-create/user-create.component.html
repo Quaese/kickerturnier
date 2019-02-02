@@ -1,3 +1,9 @@
-<p>
-  user-create works!
-</p>
+<div>
+    <dynamic-form
+        #form="dynamicForm"
+        [config]="config"
+        (submit)="hSubmit($event)">
+    </dynamic-form>
+    {{ form.valid }}
+    {{ form.value | json }}
+</div>

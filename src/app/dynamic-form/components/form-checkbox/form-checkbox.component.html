@@ -1,0 +1,11 @@
+<div class="dynamic-field form-radiogroup" [ngClass]="config.classes?.inner" [formGroup]="group">
+    <input
+      type="checkbox"
+      [ngClass]="config.classes?.control"
+      [formControlName]="config.name"
+      [attr.disabled]="config.disabled"
+      [id]="id"
+      value="{{config.value}}"
+    />
+    <label [ngClass]="config.classes?.label" [attr.for]="id">{{config.label}}</label>
+  </div>
