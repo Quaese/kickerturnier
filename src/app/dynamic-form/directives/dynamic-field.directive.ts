@@ -11,6 +11,7 @@ import { FormCheckboxGroupComponent } from './../components/form-checkboxgroup/f
 import { FormControlgroupComponent } from './../components/form-controlgroup/form-controlgroup.component';
 import { FormInputComponent } from './../components/form-input/form-input.component';
 import { FormInputgroupComponent } from './../components/form-inputgroup/form-inputgroup.component';
+import { FormPasswordconfirmComponent } from './../components/form-passwordconfirm/form-passwordconfirm.component';
 import { FormRadiogroupComponent } from './../components/form-radiogroup/form-radiogroup.component';
 import { FormSelectComponent } from './../components/form-select/form-select.component';
 import { FormTextareaComponent } from './../components/form-textarea/form-textarea.component';
@@ -24,6 +25,7 @@ const components = {
   controlgroup: FormControlgroupComponent,
   input: FormInputComponent,
   inputgroup: FormInputgroupComponent,
+  passwordconfirm: FormPasswordconfirmComponent,
   radiogroup: FormRadiogroupComponent,
   select: FormSelectComponent,
   textarea: FormTextareaComponent

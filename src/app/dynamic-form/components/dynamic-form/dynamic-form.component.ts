@@ -15,6 +15,7 @@ import { FormArray } from '@angular/forms';
  *  import { radioRequiredValidator } from './dynamic-form/validators/radio-required.validator';
  *
  *  import { DynamicFormComponent } from './dynamic-form/components/dynamic-form/dynamic-form.component';
+ *  import { passwordConfirmValidator } from './dynamic-form/validators/passwordconfirm.validator';
  *
  *  @Component({
  *    selector: 'app-root',
@@ -179,7 +180,7 @@ import { FormArray } from '@angular/forms';
  *          {
  *            type: 'input',
  *            name: 'controlgroup_control_01',
- *            label: 'controlgroup_control_01',
+ *            label: 'controlgroup_control_01 - text field',
  *            placeholder: 'Enter controlgroup_control_01',
  *            validation: [
  *              Validators.required,
@@ -192,10 +193,25 @@ import { FormArray } from '@angular/forms';
  *            }
  *          },
  *          {
- *            type: 'select',
+ *            type: 'input',
  *            name: 'controlgroup_control_02',
- *            label: 'controlgroup_control_02',
- *            placeholder: 'Enter controlgroup_control_02',
+ *            label: 'controlgroup_control_02 - date field',
+ *            placeholder: 'Enter Date',
+ *            inputtype: 'date',
+ *            validation: [
+ *            ],
+ *            classes: {
+ *              wrapper: 'form-group',
+ *              label: 'col-sm-2 col-form-label',
+ *              inner: 'col-sm-10',
+ *              control: 'form-control'
+ *            }
+ *          },
+ *          {
+ *            type: 'select',
+ *            name: 'controlgroup_control_03',
+ *            label: 'controlgroup_control_03 - Select',
+ *            placeholder: 'Enter controlgroup_control_03',
  *            options: ['Hoasd', 'Hans Wuasd', 'Werner Winzig'],
  *            defaultSelected: '0',
  *            validation: [
@@ -208,6 +224,13 @@ import { FormArray } from '@angular/forms';
  *              inner: 'col-sm-10',
  *              control: 'form-control'
  *            }
+ *          },
+ *          {
+ *            type: 'input',
+ *            name: 'controlgroup_control_04',
+ *            label: 'controlgroup_control_04 - hidden field',
+ *            inputtype: 'hidden',
+ *            value: 'hidden value'
  *          }
  *        ]
  *      },
@@ -255,6 +278,26 @@ import { FormArray } from '@angular/forms';
  *        // value: false,
  *        classes: {
  *          inner: 'form-check',
+ *          control: 'form-check-input',
+ *          label: 'form-check-label'
+ *        }
+ *      },
+ *      {
+ *        type: 'passwordconfirm',
+ *        name: 'passwordconfirmgroup',
+ *        label: 'password confirmation',
+ *        validation: [
+ *          passwordConfirmValidator()
+ *        ],
+ *        controls: [
+ *          { type: 'password', name: 'password', value: '', label: 'Password', placeholder: 'Enter password', validation: [Validators.required] },
+ *          { type: 'password', name: 'passwordconfirm', value: '', label: 'Confirm password', placeholder: 'Confirm password', validation: [Validators.required] }
+ *        ],
+ *        classes: {
+ *          ...this.classes,
+ *          fieldset: 'form-group',
+ *          wrapper: 'row',
+ *          legend: 'col-form-label col-sm-2 pt-0',
  *          control: 'form-check-input',
  *          label: 'form-check-label'
  *        }
@@ -328,7 +371,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   private controlConfig = {
     notControlled: ['button', 'buttonbar'],
     controlGroups: ['inputgroup', 'controlgroup'],
-    formArrays: ['checkboxgroup']
+    formArrays: ['checkboxgroup'],
+    formGroups: ['passwordconfirm']
   };
 
   // Getter
@@ -393,12 +437,25 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     const group = this.fb.group({});
 
     this.controls.forEach(control => {
-      // if new controll contains/manages an FormArray
+      // if new control contains/manages an FormArray
       if ( (new RegExp(`^${this.controlConfig.formArrays.join('|')}$`)).test(control.type)) {
         // add FormArray to control
         group.addControl(control.name, this.fb.array(control.controls.map(item => this.fb.control(item.selected || false))));
         // push control name to array (only once)
         this.formArrayControls[control.name] = control;
+      }
+      // if new control contains/manages a formGroup (e.g. Password Confirmation)
+      else if ( (new RegExp(`^${this.controlConfig.formGroups.join('|')}$`)).test(control.type)) {
+        // add form group to control
+        group.addControl(control.name, this.fb.group({}, {validator: control.validation}));
+
+        // loop over controls that should be controlled by the form group
+        control.controls.forEach((subControl) => {
+          (group.get(control.name) as FormGroup).addControl(
+            subControl.name,
+            this.createControl(subControl)
+          );
+        });
       } else {
         group.addControl(control.name, this.createControl(control));
       }

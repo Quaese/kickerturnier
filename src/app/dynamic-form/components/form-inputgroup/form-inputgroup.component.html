@@ -1,7 +1,7 @@
 <div class="dynamic-field form-inputgroup" [ngClass]="config.classes?.wrapper" [formGroup]="group">
   <ng-template ngFor let-control [ngForOf]="config.controls">
     <div class="form-input" [ngClass]="control.classes?.wrapper">
-      <label [ngClass]="control.classes?.label">{{control.label}}</label>
+      <label *ngIf="control.label" [ngClass]="control.classes?.label">{{control.label}}</label>
       <div [ngClass]="control.classes?.inner">
         <input
           type="text"

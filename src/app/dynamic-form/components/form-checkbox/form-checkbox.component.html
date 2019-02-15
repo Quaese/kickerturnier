@@ -7,5 +7,5 @@
       [id]="id"
       value="{{config.value}}"
     />
-    <label [ngClass]="config.classes?.label" [attr.for]="id">{{config.label}}</label>
+    <label *ngIf="config.label" [ngClass]="config.classes?.label" [attr.for]="id">{{config.label}}</label>
   </div>
