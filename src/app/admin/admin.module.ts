@@ -7,6 +7,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { UserCreateComponent } from './components/user-create/user-create.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserEditComponent } from './components/user-edit/user-edit.component';
+import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { UserEditComponent } from './components/user-edit/user-edit.component';
     ],
     imports: [
         CommonModule,
-        AdminRoutingModule
+        AdminRoutingModule,
+        DynamicFormModule
     ]
 })
 export class AdminModule { }

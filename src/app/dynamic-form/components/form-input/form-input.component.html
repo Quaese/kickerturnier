@@ -1,0 +1,13 @@
+<div class="dynamic-field form-input" [ngClass]="config.classes?.wrapper" [formGroup]="group">
+  <label *ngIf="config.label" [ngClass]="config.classes?.label">{{config.label}}</label>
+  <div [ngClass]="config.classes?.inner">
+    <input
+      type="{{config.inputtype || 'text'}}"
+      [ngClass]="config.classes?.control"
+      [formControlName]="config.name"
+      [attr.placeholder]="config.placeholder"
+      [attr.disabled]="config.disabled"
+      [attr.readonly]="config.readonly"
+    />
+  </div>
+</div>

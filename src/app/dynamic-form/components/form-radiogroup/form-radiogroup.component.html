@@ -1,0 +1,19 @@
+<fieldset class="dynamic-field form-radiogroup" [ngClass]="config.classes?.fieldset" [formGroup]="group">
+  <div [ngClass]="config.classes?.wrapper">
+    <legend [ngClass]="config.classes?.legend">{{config.label}}</legend>
+    <div [ngClass]="config.classes?.inner">
+
+      <ng-template ngFor let-radio let-i="index" [ngForOf]="config.radios">
+        <input
+          type="radio"
+          [ngClass]="config.classes?.control"
+          [formControlName]="config.name"
+          [attr.disabled]="config.disabled"
+          value="{{radio.value || i}}"
+        />
+        <label [ngClass]="config.classes?.label">{{radio.label}}</label>
+      </ng-template>
+
+    </div>
+  </div>
+</fieldset>
