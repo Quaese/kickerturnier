@@ -18,4 +18,8 @@ export class UserService {
     getById(id: number) {
         return this.http.get<User>(`${config.apiUrl}/users/${id}`)
     }
+
+    createUser(user) {
+        return this.http.post<any>(`${config.apiUrl}/users/register`, user)
+    }
 }

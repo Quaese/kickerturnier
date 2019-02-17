@@ -1,9 +1,13 @@
 import { Component, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
+
+import { UserService } from './../../../services/user.service';
 
 import { FieldConfig } from '../../../dynamic-form/models/field-config.interface';
 import { FieldClasses } from '../../../dynamic-form/models/field-classes.interface';
+import { Role } from './../../../models/role.models';
 
 import { charValidator } from '../../../dynamic-form/validators/char.validator';
 import { selectValidator } from '../../../dynamic-form/validators/select.validator';
@@ -23,6 +27,8 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
 
     private changeSubscription: Subscription;
 
+    // user role array from Role enum
+    private userRoles = Object.keys(Role).map(role => Role[role]);
     // default css classes for form control/field groups
     classes:FieldClasses = {
       wrapper: 'form-group row',
@@ -37,7 +43,7 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
         name: 'firstName',
         label: 'First name',
         placeholder: 'Enter your name',
-        value: '',
+        // value: 'hans',
         validation: [
           Validators.required,
           Validators.minLength(2), charValidator
@@ -49,7 +55,7 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
         name: 'lastName',
         label: 'Last name',
         placeholder: 'Enter your last name',
-        value: '',
+        // value: 'wuasd',
         validation: [
           Validators.required,
           Validators.minLength(2), charValidator
@@ -58,10 +64,10 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
       },
       {
         type: 'input',
-        name: 'Username',
+        name: 'username',
         label: 'Username',
         placeholder: 'Enter your username',
-        value: '',
+        // value: 'hawu',
         validation: [
           Validators.required,
           Validators.minLength(2), charValidator
@@ -76,8 +82,28 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
           passwordConfirmValidator()
         ],
         controls: [
-          { type: 'password', name: 'password', value: '', label: 'Password', placeholder: 'Enter password', validation: [Validators.required] },
-          { type: 'password', name: 'passwordconfirm', value: '', label: 'Confirm password', placeholder: 'Confirm password', validation: [Validators.required] }
+          { type: 'password',
+            name: 'password',
+            // value: '123456',
+            label: 'Password',
+            placeholder: 'Enter password',
+            validation: [Validators.required],
+            classes: {
+                ...this.classes,
+                wrapper: 'form-input form-group d-flex w-100'
+            }
+          },
+          { type: 'password',
+            name: 'passwordconfirm',
+            // value: '123456',
+            label: 'Confirm password',
+            placeholder: 'Confirm password',
+            validation: [Validators.required],
+            classes: {
+                ...this.classes,
+                wrapper: 'form-input form-group d-flex w-100'
+            }
+          }
         ],
         classes: {
           ...this.classes,
@@ -92,7 +118,7 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
         type: 'select',
         name: 'role',
         label: 'Role',
-        options: ['Admin', 'User'],
+        options: this.userRoles,
         defaultSelected: '0',
         placeholder: 'Select a role',
         // value: '2',
@@ -131,180 +157,16 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
           }
         ]
       },
-    //   {
-    //     type: 'textarea',
-    //     name: 'comment',
-    //     label: 'Your comment',
-    //     placeholder: 'Enter your comment here.',
-    //     readonly: '',
-    //     value: 'Initial value',
-    //     classes: {...this.classes}
-    //   },
       {
         type: 'button',
         name: 'submit',
         label: 'Submit'
-      },
-    //   {
-    //     type: 'inputgroup',
-    //     name: 'inputgroup_01',
-    //     label: 'Inputgroup',
-    //     classes: {
-    //       wrapper: 'form-row'
-    //     },
-    //     controls: [
-    //       {
-    //         type: 'input',
-    //         name: 'zipcode',
-    //         label: 'Zipcode',
-    //         placeholder: 'Enter zipcode',
-    //         validation: [
-    //           Validators.required,
-    //         ],
-    //         classes: {
-    //           wrapper: 'form-group',
-    //           label: 'col-sm-2 col-form-label',
-    //           inner: 'col-sm-10',
-    //           control: 'form-control'
-    //         }
-    //       },
-    //       {
-    //         type: 'input',
-    //         name: 'city',
-    //         label: 'City',
-    //         placeholder: 'Enter city',
-    //         validation: [
-    //           Validators.required,
-    //         ],
-    //         classes: {
-    //           wrapper: 'form-group',
-    //           label: 'col-sm-2 col-form-label',
-    //           inner: 'col-sm-10',
-    //           control: 'form-control'
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   {
-    //     type: 'inputgroup',
-    //     name: 'inputgroup_02',
-    //     label: 'Inputgroup',
-    //     classes: {
-    //       wrapper: 'form-row'
-    //     },
-    //     controls: [
-    //       {
-    //         type: 'input',
-    //         name: 'street',
-    //         label: 'Street',
-    //         placeholder: 'Enter street',
-    //         validation: [
-    //           Validators.required,
-    //         ],
-    //         classes: {
-    //           wrapper: 'form-group',
-    //           label: 'col-sm-2 col-form-label',
-    //           inner: 'col-sm-10',
-    //           control: 'form-control'
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   {
-    //     type: 'controlgroup',
-    //     name: 'controlgroup_01',
-    //     label: 'Controlgroup',
-    //     classes: {
-    //       wrapper: 'form-row'
-    //     },
-    //     controls: [
-    //       {
-    //         type: 'input',
-    //         name: 'controlgroup_control_01',
-    //         label: 'controlgroup_control_01',
-    //         placeholder: 'Enter controlgroup_control_01',
-    //         validation: [
-    //           Validators.required,
-    //         ],
-    //         classes: {
-    //           wrapper: 'form-group',
-    //           label: 'col-sm-2 col-form-label',
-    //           inner: 'col-sm-10',
-    //           control: 'form-control'
-    //         }
-    //       },
-    //       {
-    //         type: 'select',
-    //         name: 'controlgroup_control_02',
-    //         label: 'controlgroup_control_02',
-    //         placeholder: 'Enter controlgroup_control_02',
-    //         options: ['Hoasd', 'Hans Wuasd', 'Werner Winzig'],
-    //         defaultSelected: '0',
-    //         validation: [
-    //           Validators.required,
-    //           selectValidator('0')  // use value from defaultSelected
-    //         ],
-    //         classes: {
-    //           wrapper: 'form-group',
-    //           label: 'col-sm-2 col-form-label',
-    //           inner: 'col-sm-10',
-    //           control: 'form-control'
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   {
-    //     type: 'radiogroup',
-    //     name: 'gender',
-    //     label: 'Gender',
-    //     radios: [{label: 'female', value: '0'}, {label: 'male', value: '1'}],
-    //     validation: [
-    //       radioRequiredValidator()
-    //     ],
-    //     classes: {
-    //       ...this.classes,
-    //       fieldset: 'form-group',
-    //       wrapper: 'row',
-    //       legend: 'col-form-label col-sm-2 pt-0',
-    //       control: 'form-check-input',
-    //       label: 'form-check-label'
-    //     }
-    //   },
-    //   {
-    //     type: 'checkboxgroup',
-    //     name: 'prg_language',
-    //     label: 'programming language',
-    //     controls: [
-    //       { type: 'checkbox', name: 'prg_language', value: 'javascript', label: 'JavaScript', selected: false },
-    //       { type: 'checkbox', name: 'prg_language', value: 'typescript', label: 'TypeScript', selected: false },
-    //       { type: 'checkbox', name: 'prg_language', value: 'python', label: 'Python', selected: false }
-    //     ],
-    //     classes: {
-    //       ...this.classes,
-    //       fieldset: 'form-group',
-    //       wrapper: 'row',
-    //       legend: 'col-form-label col-sm-2 pt-0',
-    //       control: 'form-check-input',
-    //       label: 'form-check-label'
-    //     }
-    //   },
-    //   {
-    //     type: 'checkbox',
-    //     name: 'rich',
-    //     label: 'rich?',
-    //     selected: false,
-    //     // disabled: '',
-    //     // value: false,
-    //     classes: {
-    //       inner: 'form-check',
-    //       control: 'form-check-input',
-    //       label: 'form-check-label'
-    //     }
-    //   }
+      }
     ];
 
     constructor(
-      private changeDetectorRef: ChangeDetectorRef
+      private changeDetectorRef: ChangeDetectorRef,
+      private userService: UserService
     ) {}
 
     ngAfterViewInit() {
@@ -322,8 +184,8 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
         }
       });
 
-      this.form.setDisabled('submit', true);
-      this.form.setDisabled('buttonbar_01', true);
+      this.form.setDisabled('submit', !this.form.valid);
+      this.form.setDisabled('buttonbar_01', !this.form.valid);
       // this.form.setValue('name', 'Quaese');
 
       // avoid 'ExpressionChangedAfterItHasBeenCheckedError' error
@@ -332,7 +194,21 @@ export class UserCreateComponent implements AfterViewInit, OnDestroy {
     }
 
     hSubmit(formValues) {
-      console.log('hSubmit (app.component): ', formValues, ' - ', this.form.valid);
+      // console.log('hSubmit (app.component): ', formValues, ' - ', this.form.valid, {...formValues, password: formValues.passwordconfirmgroup.password, role: this.userRoles[Number(formValues.role)-1]});
+      this.userService.createUser({
+        ...formValues,
+        password: formValues.passwordconfirmgroup.password,
+        role: this.userRoles[Number(formValues.role)-1]
+      })
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log('user-create: ToDo - give feedback for data.success true/false', data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     }
 
     ngOnDestroy() {

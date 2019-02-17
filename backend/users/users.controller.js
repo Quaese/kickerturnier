@@ -30,7 +30,7 @@ function authenticate(req, res, next) {
 
 function register(req, res, next) {
     userService.create(req.body)
-        .then(() => res.json({}))
+        .then((user) => res.json({success: (user ? true : false)}))
         .catch(err => next(err));
 }
 

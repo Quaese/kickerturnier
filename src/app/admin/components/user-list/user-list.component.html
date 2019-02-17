@@ -28,7 +28,7 @@
                 <tr>
                     <th scope="row">{{i}}</th>
                     <td>{{user.firstName}}</td>
-                    <td>{{user.firstName}}</td>
+                    <td>{{user.lastName}}</td>
                     <td><a href="/admin/user-edit/{{user.id}}" class="badge badge-primary" (click)="navigate($event, {path: '/admin/user-edit', id: user.id})">edit</a></td>
                 </tr>
             </ng-template>
