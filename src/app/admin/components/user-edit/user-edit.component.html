@@ -1,3 +1,10 @@
-<p>
-  user-edit works! ... now you can edit user with id {{userId}}
-</p>
+<div>
+    <p>
+      user-edit works! ... now you can edit user with id {{userId}}
+    </p>
+    <dynamic-form
+        #form="dynamicForm"
+        [config]="config"
+        (submit)="hSubmit($event)">
+    </dynamic-form>
+</div>
