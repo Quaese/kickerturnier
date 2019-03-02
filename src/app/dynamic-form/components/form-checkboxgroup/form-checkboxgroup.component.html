@@ -9,6 +9,7 @@
           [ngClass]="config.classes?.control"
           [formControl]="cb"
           [attr.disabled]="config.disabled"
+          [checked]="config.controls[i].selected || false"
         />
         <label [ngClass]="config.classes?.label">{{config.controls[i].label}}</label>
       </ng-template>

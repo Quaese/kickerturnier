@@ -32,7 +32,9 @@ async function authenticate({username, password}) {
 
         // JWT token structure:
         // header.payload.signature
-        // e.g. eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJrZXkiOiJ2YWwiLCJpYXQiOjE0MjI2MDU0NDV9.eUiabuiKv-8PYk2AkGY4Fb5KMZeorYBLw261JPQD5lM
+        // e.g.
+        // - eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJrZXkiOiJ2YWwiLCJpYXQiOjE0MjI2MDU0NDV9.eUiabuiKv-8PYk2AkGY4Fb5KMZeorYBLw261JPQD5lM
+        // - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YzA5Mzc0MTM2MzA2MmExYjQzZDM3YjAiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE1NDQxODc3MDV9.YnKmMYB0TY36PxqHg29tl55DC8dg356JnUs5RQx5jAA
         //
         // {sub: user.id, role: user.role} is written to payload when .sign is executed
         const token = jwt.sign({sub: user.id, role: user.role}, config.secret);
@@ -93,7 +95,7 @@ async function update(id, userParam, userSign) {
     // copy userParam properties to user
     Object.assign(user, userParam);
 
-    await user.save();
+    return await user.save();
 }
 
 async function _delete(id, userParam, userSign) {

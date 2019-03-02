@@ -2,10 +2,10 @@ import { FormArray } from '@angular/forms';
 /*
  * Call with a component, e.g.:
  *
- *
  *  import { Component, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
  *  import { Validators } from '@angular/forms';
- *  import { Subscription } from 'rxjs';
+ *  import { Subscription, of } from 'rxjs';
+ *  import { delay } from 'rxjs/operators';
  *
  *  import { FieldConfig } from './dynamic-form/models/field-config.interface';
  *  import { FieldClasses } from './dynamic-form/models/field-classes.interface';
@@ -44,7 +44,7 @@ import { FormArray } from '@angular/forms';
  *        label: 'Full name',
  *        placeholder: 'Enter your name',
  *        // disabled: '',
- *        value: 'Hoasd',
+ *        //value: 'Hoasd',
  *        validation: [
  *          Validators.required,
  *          Validators.minLength(2), charValidator
@@ -74,35 +74,8 @@ import { FormArray } from '@angular/forms';
  *        label: 'Your comment',
  *        placeholder: 'Enter your comment here.',
  *        readonly: '',
- *        value: 'Initial value',
+ *        // value: 'Initial value',
  *        classes: {...this.classes}
- *      },
- *      {
- *        type: 'button',
- *        name: 'submit',
- *        label: 'Submit'
- *      },
- *      {
- *        type: 'buttonbar',
- *        name: 'buttonbar_01',
- *        label: 'Buttonbar',
- *        buttons: [
- *          {
- *            type: 'button',
- *            name: 'buttonbar_reset',
- *            label: 'Reset',
- *            action: 'reset',
- *            classes: 'btn'
- *          },
- *          {
- *            type: 'button',
- *            name: 'buttonbar_submit',
- *            label: 'Submit',
- *            action: 'submit',
- *            classes: 'btn btn-primary',
- *            canDisable: true
- *          }
- *        ]
  *      },
  *      {
  *        type: 'inputgroup',
@@ -238,7 +211,7 @@ import { FormArray } from '@angular/forms';
  *        type: 'radiogroup',
  *        name: 'gender',
  *        label: 'Gender',
- *        radios: [{label: 'female', value: '0'}, {label: 'male', value: '1'}],
+ *        radios: [{type: 'radio', label: 'female', value: '0'}, {type: 'radio', label: 'male', value: '1'}],
  *        validation: [
  *          radioRequiredValidator()
  *        ],
@@ -301,6 +274,33 @@ import { FormArray } from '@angular/forms';
  *          control: 'form-check-input',
  *          label: 'form-check-label'
  *        }
+ *      },
+ *      {
+ *        type: 'button',
+ *        name: 'submit',
+ *        label: 'Submit'
+ *      },
+ *      {
+ *        type: 'buttonbar',
+ *        name: 'buttonbar_01',
+ *        label: 'Buttonbar',
+ *        buttons: [
+ *          {
+ *            type: 'button',
+ *            name: 'buttonbar_reset',
+ *            label: 'Reset',
+ *            action: 'reset',
+ *            classes: 'btn'
+ *          },
+ *          {
+ *            type: 'button',
+ *            name: 'buttonbar_submit',
+ *            label: 'Submit',
+ *            action: 'submit',
+ *            classes: 'btn btn-primary',
+ *            canDisable: true
+ *          }
+ *        ]
  *      }
  *    ];
  *
@@ -311,25 +311,317 @@ import { FormArray } from '@angular/forms';
  *    ngAfterViewInit() {
  *      let previousValid = this.form.valid;
  *
+ *      // method to simulate update of values (e.g. after getting data from http request)
+ *      this.updateFormValuesWithObservable();
+ *
  *      // subscribe to changes$ method from DynamicFormComponent
  *      this.changeSubscription = this.form.changes$.subscribe(() => {
  *        // if the valid value of the form changed
  *        if (previousValid !== this.form.valid) {
  *          // call setDisabled method from DynamicFormComponent to enable/disable the submit/buttonbar button
- *          this.form.setDisabled('submit', previousValid);
- *          this.form.setDisabled('buttonbar_01', previousValid);
+ *          this.setDisabled(previousValid);
  *          // set new status of form
  *          previousValid = this.form.valid;
  *        }
  *      });
  *
- *      this.form.setDisabled('submit', true);
- *      this.form.setDisabled('buttonbar_01', true);
+ *      this.setDisabled(!this.form.valid);
  *      // this.form.setValue('name', 'Quaese');
  *
  *      // avoid 'ExpressionChangedAfterItHasBeenCheckedError' error
  *      // (more see: https://blog.angularindepth.com/everything-you-need-to-know-about-the-expressionchangedafterithasbeencheckederror-error-e3fd9ce7dbb4)
  *      this.changeDetectorRef.detectChanges();
+ *    }
+ *
+ *    updateFormValuesWithObservable() {
+ *      const subscribe = of(null).pipe(
+ *        delay(1000)
+ *      )
+ *      .subscribe(() => {
+ *        let newValuesConfig: FieldConfig[];
+ *
+ *        newValuesConfig = [
+ *          {
+ *            type: 'input',
+ *            name: 'name',
+ *            label: 'Full name',
+ *            placeholder: 'Enter your name',
+ *            // disabled: '',
+ *            value: 'Hoasd',
+ *            validation: [
+ *              Validators.required,
+ *              Validators.minLength(2), charValidator
+ *            ],
+ *            classes: {...this.classes}
+ *          },
+ *          {
+ *            type: 'select',
+ *            name: 'nick',
+ *            label: 'Favorite nick name',
+ *            options: ['Hoasd', 'Hans Wuasd', 'Werner Winzig'],
+ *            defaultSelected: '0',
+ *            placeholder: 'Select an option',
+ *            value: '1',
+ *            validation: [
+ *              Validators.required,
+ *              selectValidator('0')  // use value from defaultSelected
+ *            ],
+ *            classes: {
+ *              ...this.classes,
+ *              control: 'form-control form-control-lg'
+ *            }
+ *          },
+ *          {
+ *            type: 'textarea',
+ *            name: 'comment',
+ *            label: 'Your comment',
+ *            placeholder: 'Enter your comment here.',
+ *            readonly: '',
+ *            value: 'Updated value',
+ *            classes: {...this.classes}
+ *          },
+ *          {
+ *            type: 'inputgroup',
+ *            name: 'inputgroup_01',
+ *            label: 'Inputgroup',
+ *            classes: {
+ *              wrapper: 'form-row'
+ *            },
+ *            controls: [
+ *              {
+ *                type: 'input',
+ *                name: 'zipcode',
+ *                label: 'Zipcode',
+ *                placeholder: 'Enter zipcode',
+ *                value: '12345',
+ *                validation: [
+ *                  Validators.required,
+ *                ],
+ *                classes: {
+ *                  wrapper: 'form-group',
+ *                  label: 'col-sm-2 col-form-label',
+ *                  inner: 'col-sm-10',
+ *                  control: 'form-control'
+ *                }
+ *              },
+ *              {
+ *                type: 'input',
+ *                name: 'city',
+ *                label: 'City',
+ *                placeholder: 'Enter city',
+ *                value: 'Irgendwo',
+ *                validation: [
+ *                  Validators.required,
+ *                ],
+ *                classes: {
+ *                  wrapper: 'form-group',
+ *                  label: 'col-sm-2 col-form-label',
+ *                  inner: 'col-sm-10',
+ *                  control: 'form-control'
+ *                }
+ *              }
+ *            ]
+ *          },
+ *          {
+ *            type: 'inputgroup',
+ *            name: 'inputgroup_02',
+ *            label: 'Inputgroup',
+ *            classes: {
+ *              wrapper: 'form-row'
+ *            },
+ *            controls: [
+ *              {
+ *                type: 'input',
+ *                name: 'street',
+ *                label: 'Street',
+ *                placeholder: 'Enter street',
+ *                value: 'Am Hang',
+ *                validation: [
+ *                  Validators.required,
+ *                ],
+ *                classes: {
+ *                  wrapper: 'form-group',
+ *                  label: 'col-sm-2 col-form-label',
+ *                  inner: 'col-sm-10',
+ *                  control: 'form-control'
+ *                }
+ *              }
+ *            ]
+ *          },
+ *          {
+ *            type: 'controlgroup',
+ *            name: 'controlgroup_01',
+ *            label: 'Controlgroup',
+ *            classes: {
+ *              wrapper: 'form-row'
+ *            },
+ *            controls: [
+ *              {
+ *                type: 'input',
+ *                name: 'controlgroup_control_01',
+ *                label: 'controlgroup_control_01 - text field',
+ *                placeholder: 'Enter controlgroup_control_01',
+ *                value: '... toll...',
+ *                validation: [
+ *                  Validators.required,
+ *                ],
+ *                classes: {
+ *                  wrapper: 'form-group',
+ *                  label: 'col-sm-2 col-form-label',
+ *                  inner: 'col-sm-10',
+ *                  control: 'form-control'
+ *                }
+ *              },
+ *              {
+ *                type: 'input',
+ *                name: 'controlgroup_control_02',
+ *                label: 'controlgroup_control_02 - date field',
+ *                placeholder: 'Enter Date',
+ *                inputtype: 'date',
+ *                validation: [
+ *                ],
+ *                classes: {
+ *                  wrapper: 'form-group',
+ *                  label: 'col-sm-2 col-form-label',
+ *                  inner: 'col-sm-10',
+ *                  control: 'form-control'
+ *                }
+ *              },
+ *              {
+ *                type: 'select',
+ *                name: 'controlgroup_control_03',
+ *                label: 'controlgroup_control_03 - Select',
+ *                placeholder: 'Enter controlgroup_control_03',
+ *                value: '1',
+ *                options: ['Hoasd', 'Hans Wuasd', 'Werner Winzig'],
+ *                defaultSelected: '0',
+ *                validation: [
+ *                  Validators.required,
+ *                  selectValidator('0')  // use value from defaultSelected
+ *                ],
+ *                classes: {
+ *                  wrapper: 'form-group',
+ *                  label: 'col-sm-2 col-form-label',
+ *                  inner: 'col-sm-10',
+ *                  control: 'form-control'
+ *                }
+ *              },
+ *              {
+ *                type: 'input',
+ *                name: 'controlgroup_control_04',
+ *                label: 'controlgroup_control_04 - hidden field',
+ *                inputtype: 'hidden',
+ *                value: 'hidden value'
+ *              }
+ *            ]
+ *          },
+ *          {
+ *            type: 'radiogroup',
+ *            name: 'gender',
+ *            label: 'Gender',
+ *            radios: [{type: 'radio', label: 'female', value: '0', selected: true}, {type: 'radio', label: 'male', value: '1'}],
+ *            validation: [
+ *              radioRequiredValidator()
+ *            ],
+ *            classes: {
+ *              ...this.classes,
+ *              fieldset: 'form-group',
+ *              wrapper: 'row',
+ *              legend: 'col-form-label col-sm-2 pt-0',
+ *              control: 'form-check-input',
+ *              label: 'form-check-label'
+ *            }
+ *          },
+ *          {
+ *            type: 'checkboxgroup',
+ *            name: 'prg_language',
+ *            label: 'programming language',
+ *            controls: [
+ *              { type: 'checkbox', name: 'prg_language', value: 'javascript', label: 'JavaScript', selected: true },
+ *              { type: 'checkbox', name: 'prg_language', value: 'typescript', label: 'TypeScript', selected: false },
+ *              { type: 'checkbox', name: 'prg_language', value: 'python', label: 'Python', selected: true }
+ *            ],
+ *            classes: {
+ *              ...this.classes,
+ *              fieldset: 'form-group',
+ *              wrapper: 'row',
+ *              legend: 'col-form-label col-sm-2 pt-0',
+ *              control: 'form-check-input',
+ *              label: 'form-check-label'
+ *            }
+ *          },
+ *          {
+ *            type: 'checkbox',
+ *            name: 'rich',
+ *            label: 'rich?',
+ *            selected: true,
+ *            // disabled: '',
+ *            // value: false,
+ *            classes: {
+ *              inner: 'form-check',
+ *              control: 'form-check-input',
+ *              label: 'form-check-label'
+ *            }
+ *          },
+ *          {
+ *            type: 'passwordconfirm',
+ *            name: 'passwordconfirmgroup',
+ *            label: 'password confirmation',
+ *            validation: [
+ *              passwordConfirmValidator()
+ *            ],
+ *            controls: [
+ *              { type: 'password', name: 'password', value: 'asdf', label: 'Password', placeholder: 'Enter password', validation: [Validators.required] },
+ *              { type: 'password', name: 'passwordconfirm', value: 'asdf', label: 'Confirm password', placeholder: 'Confirm password', validation: [Validators.required] }
+ *            ],
+ *            classes: {
+ *              ...this.classes,
+ *              fieldset: 'form-group',
+ *              wrapper: 'row',
+ *              legend: 'col-form-label col-sm-2 pt-0',
+ *              control: 'form-check-input',
+ *              label: 'form-check-label'
+ *            }
+ *          },
+ *          {
+ *            type: 'button',
+ *            name: 'submit',
+ *            // disabled: !this.form.valid,
+ *            label: 'Submit'
+ *          },
+ *          {
+ *            type: 'buttonbar',
+ *            name: 'buttonbar_01',
+ *            label: 'Buttonbar',
+ *            buttons: [
+ *              {
+ *                type: 'button',
+ *                name: 'buttonbar_reset',
+ *                label: 'Reset',
+ *                action: 'reset',
+ *                classes: 'btn'
+ *              },
+ *              {
+ *                type: 'button',
+ *                name: 'buttonbar_submit',
+ *                label: 'Submit',
+ *                action: 'submit',
+ *                classes: 'btn btn-primary',
+ *                // disabled: !this.form.valid,
+ *                canDisable: true
+ *              }
+ *            ]
+ *          }
+ *        ];
+ *
+ *        // set values from config to form controls
+ *        this.form.setValues(newValuesConfig);
+ *      });
+ *    }
+ *
+ *    setDisabled(disabled) {
+ *      this.form.setDisabled('submit', disabled);
+ *      this.form.setDisabled('buttonbar_01', disabled);
  *    }
  *
  *    hSubmit(formValues) {
@@ -368,34 +660,18 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   private formArrayControls = {};
 
+  // object to hold control references as value to their names as keys {controlname: controlreference, ...}
+  private groupControls = {};
+
   private controlConfig = {
     notControlled: ['button', 'buttonbar'],
-    controlGroups: ['inputgroup', 'controlgroup'],
     formArrays: ['checkboxgroup'],
-    formGroups: ['passwordconfirm']
+    formGroups: ['inputgroup', 'passwordconfirm', 'controlgroup']
   };
 
   // Getter
   get controls() {
-    let controlgroups = [],
-      controls = this.config.filter((item) => {
-        // get controlgroups
-        if ((new RegExp(`^${this.controlConfig.controlGroups.join('|')}$`)).test(item.type)) {
-          // add controls to controlgroup array
-          controlgroups = controlgroups.concat(item.controls);
-          // do not add them to controls array
-          return false;
-        }
-
-        return !(new RegExp(`^${this.controlConfig.notControlled.join('|')}$`)).test(item.type);
-      });
-
-    // if controlgroups array is not empty => add content to controls array
-    if (controlgroups.length) {
-      controls = controls.concat(controlgroups);
-    }
-
-    return controls;
+    return this.config.filter((item) => !(new RegExp(`^${this.controlConfig.notControlled.join('|')}$`)).test(item.type));
   }
   get valid() { return this.form.valid }
   get value() { return this.form.value }
@@ -407,29 +683,36 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     console.log('dynamic-form.component (OnInit): md5("hello") = ', md5('hello'));
-
     this.form = this.createGroup();
   }
 
   ngOnChanges() {
     if (this.form) {
-      // get all controls from the config array (except buttons)
-      const controls = Object.keys(this.form.controls);
+      // get all controls from the form group object
+      const formControls = Object.keys(this.form.controls);
       // get array containing control names only
       const configControls = this.controls.map((item) => item.name);
 
-      console.log('controls (dynamic-form.component): ', controls);
-      console.log('configControls (dynamic-form.component): ', configControls);
+      console.log('formControls (dynamic-form.component): ', formControls);
+      console.log('configControls (dynamic-form.component): ', JSON.stringify(configControls));
 
-      controls
-        .filter((control) => !configControls.includes(control))     // get all controls which are not included in the config
-        .forEach((control) => this.form.removeControl(control));    // remove all not included controls from form
+      // this.controls.forEach(control => {
+      //   console.log(control.name, ': ', this.form.get(control.name) instanceof FormGroup, this.form.get(control.name) instanceof FormArray);
+      // })
+
+      formControls
+      .filter((control) => !configControls.includes(control))     // get all controls which are not included in the config
+      .forEach((control) => {
+        this.form.removeControl(control);    // remove all not included controls from form
+        delete this.groupControls[control];  // remove control name from group
+      });
 
       configControls
-        .filter((control) => !controls.includes(control))
+        .filter((control) => !formControls.includes(control))
         .forEach((name) => {
-          const config = this.config.find((control) => control.name === name);
-          this.form.addControl(name, this.createControl(config));
+          const singleControl = this.config.find((control) => control.name === name);
+          // prepare control from config and add to form group object
+          singleControl && this.prepareControl(singleControl, this.form);
         });
     }
   }
@@ -438,31 +721,43 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     const group = this.fb.group({});
 
     this.controls.forEach(control => {
-      // if new control contains/manages an FormArray
-      if ( (new RegExp(`^${this.controlConfig.formArrays.join('|')}$`)).test(control.type)) {
-        // add FormArray to control
-        group.addControl(control.name, this.fb.array(control.controls.map(item => this.fb.control(item.selected || false))));
-        // push control name to array (only once)
-        this.formArrayControls[control.name] = control;
-      }
-      // if new control contains/manages a formGroup (e.g. Password Confirmation)
-      else if ( (new RegExp(`^${this.controlConfig.formGroups.join('|')}$`)).test(control.type)) {
-        // add form group to control
-        group.addControl(control.name, this.fb.group({}, {validator: control.validation}));
-
-        // loop over controls that should be controlled by the form group
-        control.controls.forEach((subControl) => {
-          (group.get(control.name) as FormGroup).addControl(
-            subControl.name,
-            this.createControl(subControl)
-          );
-        });
-      } else {
-        group.addControl(control.name, this.createControl(control));
-      }
+      this.prepareControl(control, group);
     });
 
     return group;
+  }
+
+  prepareControl(control: FieldConfig, group: FormGroup) {
+    // if new control contains/manages an FormArray
+    if ( (new RegExp(`^${this.controlConfig.formArrays.join('|')}$`)).test(control.type)) {
+      // add FormArray to control
+      group.addControl(control.name, this.fb.array(control.controls.map(item => this.fb.control(item.selected || false))));
+      // push control name to array (only once)
+      this.formArrayControls[control.name] = control;
+      // add control reference with its name to control object
+      this.groupControls[control.name] = group.get(control.name);
+    }
+    // if new control contains/manages a formGroup (e.g. Password Confirmation)
+    else if ( (new RegExp(`^${this.controlConfig.formGroups.join('|')}$`)).test(control.type)) {
+      // add form group to control
+      group.addControl(control.name, this.fb.group({}, {validator: control.validation}));
+      // add control reference with its name to control object
+      this.groupControls[control.name] = group.get(control.name);
+
+      // loop over controls that should be controlled by the form group
+      control.controls.forEach((subControl) => {
+        (group.get(control.name) as FormGroup).addControl(
+          subControl.name,
+          this.createControl(subControl)
+        );
+        // add control reference with its name to control object
+        this.groupControls[subControl.name] = group.get(control.name).get(subControl.name);
+      });
+    } else {
+      group.addControl(control.name, this.createControl(control));
+      // add control reference with its name to control object
+      this.groupControls[control.name] = group.get(control.name);
+    }
   }
 
   createControl(config: FieldConfig) {
@@ -491,8 +786,48 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     });
   }
 
-  setValue(name: string, value: any) {
-    this.form.controls[name] && this.form.controls[name].setValue(value, {emitEvent: true});
+  setValue(name: string, value: any, options?: any) {
+    // if a control exists
+    if (this.groupControls[name]) {
+      // if current control is no FormArray => set value
+      if (!(this.groupControls[name] instanceof FormArray)) {
+        this.groupControls[name].setValue(value, {emitEvent: true});
+        // if current control is inside a FormArray
+      } else if (options && options.index !== undefined && options.type === 'checkbox') {
+        this.groupControls[name].controls[options.index].setValue(value, {emitEvent: true});
+      }
+    }
+  }
+
+  setValues(newValuesConfig: FieldConfig[]) {
+    // loop over controls in newValuesConfig
+    newValuesConfig.forEach(control => {
+      // default: control has a value
+      if (control.value !== undefined) {
+        this.setValue(control.name, control.value);
+      // radio buttons
+      } else if (control.radios) {
+        const radio = control.radios.filter(innerControl => (innerControl.selected !== undefined && innerControl.selected));
+
+        radio.length && this.setValue(control.name, radio[0].value);
+      }
+
+      if (control.controls) {
+        control.controls.forEach((innerControl, index) => {
+          // if innerControl
+          if (innerControl.name !== undefined && innerControl.value !== undefined) {
+            this.setValue(
+              innerControl.name,
+              innerControl.selected !== undefined ? innerControl.selected : innerControl.value,
+              {
+                index: index,
+                type: innerControl.type
+              }
+            );
+          }
+        });
+      }
+    });
   }
 
   mapFormArrays() {

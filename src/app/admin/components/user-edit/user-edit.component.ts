@@ -135,6 +135,12 @@ export class UserEditComponent implements OnInit, AfterViewInit {
           }
         },
         {
+          type: 'input',
+          name: '_id',
+          inputtype: 'hidden',
+          value: ''
+        },
+        {
           type: 'buttonbar',
           name: 'buttonbar_01',
           label: 'Buttonbar',
@@ -159,11 +165,6 @@ export class UserEditComponent implements OnInit, AfterViewInit {
               canDisable: true
             }
           ]
-        },
-        {
-          type: 'button',
-          name: 'submit',
-          label: 'Submit'
         }
       ];
 
@@ -182,19 +183,24 @@ export class UserEditComponent implements OnInit, AfterViewInit {
       let previousValid = this.form.valid;
 
       if (this.userId) {
-          this.userService.getById(this.userId)
-              // .pipe(first())
-              .subscribe(user => {
-                  this.config.forEach(field => {
-                      if (user[field.name]) {
-                          console.log(user[field.name]);
-                          field.value = user[field.name];
-                          this.form.setValue(field.name, user[field.name]);
-                      }
-                  });
+        // ask user service for user with the given id
+        this.userService.getById(this.userId)
+          .subscribe(user => {
+            this.config.forEach(field => {
+              if (user[field.name]) {
+                switch(field.type) {
+                  case 'select':
+                    field.value = this.userRoles.indexOf(user[field.name]) > -1 ? (this.userRoles.indexOf(user[field.name]) + 1).toString() : '0';
+                    break;
+                  default:
+                    field.value = user[field.name];
+                }
 
-                  console.log(this.config);
-              })
+                // set field value to form control
+                this.form.setValue(field.name, field.value);
+              }
+            });
+          });
       }
 
       // subscribe to changes$ method from DynamicFormComponent
@@ -202,19 +208,29 @@ export class UserEditComponent implements OnInit, AfterViewInit {
         // if the valid value of the form changed
         if (previousValid !== this.form.valid) {
           // call setDisabled method from DynamicFormComponent to enable/disable the submit/buttonbar button
-          this.form.setDisabled('submit', previousValid);
           this.form.setDisabled('buttonbar_01', previousValid);
           // set new status of form
           previousValid = this.form.valid;
         }
       });
 
-      this.form.setDisabled('submit', !this.form.valid);
+      // this.form.setDisabled('submit', !this.form.valid);
       this.form.setDisabled('buttonbar_01', !this.form.valid);
-      // this.form.setValue('name', 'Quaese');
 
       // avoid 'ExpressionChangedAfterItHasBeenCheckedError' error
       // (more see: https://blog.angularindepth.com/everything-you-need-to-know-about-the-expressionchangedafterithasbeencheckederror-error-e3fd9ce7dbb4)
       this.changeDetectorRef.detectChanges();
+    }
+
+    hSubmit(formValues) {
+      const user = {...formValues, role: this.userRoles[Number(formValues.role)-1]};
+
+      console.log('hSubmit (app.component): ', formValues, ' - ', this.form.valid, 'user: ', user);
+      this.userService.updateUser(user._id, user)
+        .pipe(first())
+        .subscribe(user => {
+          // ToDo: Display success message
+          console.log('updated user: ', user);
+        });
     }
 }

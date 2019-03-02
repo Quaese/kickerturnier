@@ -6,7 +6,9 @@
       [formControlName]="config.name"
       [attr.placeholder]="config.placeholder"
       [attr.readonly]="config.readonly"
-      [attr.disabled]="config.disabled">
+      [attr.disabled]="config.disabled"
+      [value]="config.value || null"
+    >
     </textarea>
   </div>
 </div>

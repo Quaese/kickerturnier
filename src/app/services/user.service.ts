@@ -22,4 +22,8 @@ export class UserService {
     createUser(user) {
         return this.http.post<any>(`${config.apiUrl}/users/register`, user)
     }
+
+    updateUser(id: any, user) {
+      return this.http.put<any>(`${config.apiUrl}/users/${id}`, user)
+    }
 }

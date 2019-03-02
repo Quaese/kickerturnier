@@ -10,6 +10,7 @@
           [formControlName]="config.name"
           [attr.disabled]="config.disabled"
           value="{{radio.value || i}}"
+          [checked]="radio.selected || null"
         />
         <label [ngClass]="config.classes?.label">{{radio.label}}</label>
       </ng-template>

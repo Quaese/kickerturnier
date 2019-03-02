@@ -6,6 +6,7 @@
       [attr.disabled]="config.disabled"
       [id]="id"
       value="{{config.value}}"
+      [checked]="config.selected || false"
     />
     <label *ngIf="config.label" [ngClass]="config.classes?.label" [attr.for]="id">{{config.label}}</label>
   </div>

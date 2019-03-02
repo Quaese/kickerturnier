@@ -6,6 +6,7 @@
       [formControlName]="config.name"
       [attr.disabled]="config.disabled"
       (change)="onChange($event)"
+      [value]="config.value || null"
     >
       <option value="{{config.defaultSelected || 0}}">{{config.placeholder}}</option>
       <ng-template ngFor let-option let-i="index" [ngForOf]="config.options">
